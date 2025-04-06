@@ -1,4 +1,5 @@
-package HelloApp;
+package CORBA_IDL.HelloApp;
+
 
 
 /**
@@ -8,6 +9,6 @@ package HelloApp;
 * Sunday, April 6, 2025 6:41:48 PM SGT
 */
 
-public interface Hello extends HelloOperations, org.omg.CORBA.Object, org.omg.CORBA.portable.IDLEntity 
+public interface Hello extends HelloApp.HelloOperations, org.omg.CORBA.Object, org.omg.CORBA.portable.IDLEntity
 {
 } // interface Hello

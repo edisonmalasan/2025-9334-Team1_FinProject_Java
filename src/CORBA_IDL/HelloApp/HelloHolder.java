@@ -1,4 +1,4 @@
-package HelloApp;
+package CORBA_IDL.HelloApp;
 
 /**
 * HelloApp/HelloHolder.java .

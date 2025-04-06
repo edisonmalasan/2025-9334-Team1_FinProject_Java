@@ -1,4 +1,5 @@
-package HelloApp;
+package CORBA_IDL.HelloApp;
+
 
 
 /**
