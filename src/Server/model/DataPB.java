@@ -22,8 +22,8 @@ public class DataPB {
             String user = "root";
             String password = "";
             con = DriverManager.getConnection(url, user, password);
-        } catch (Exception var3) {
-            var3.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
