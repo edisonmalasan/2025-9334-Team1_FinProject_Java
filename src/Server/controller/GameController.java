@@ -1,4 +1,4 @@
 package Server.controller;
 
-public class HelloWorld {
+public class GameController {
 }
