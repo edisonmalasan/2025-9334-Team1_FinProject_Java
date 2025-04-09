@@ -1,4 +1,4 @@
 package Server.service;
 
-public class HelloWorld {
+public class AuthService {
 }
