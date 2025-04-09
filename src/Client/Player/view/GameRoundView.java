@@ -1,4 +1,4 @@
 package Client.Player.view;
 
-public class HelloWorld {
+public class GameRoundView {
 }

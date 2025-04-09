@@ -1,4 +1,4 @@
 package Client.Player.model;
 
-public class HelloWorld {
+public class PlayerModel {
 }

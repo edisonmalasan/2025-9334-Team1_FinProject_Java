@@ -1,4 +1,4 @@
 package Client.Player.controller;
 
-public class HelloWorld {
+public class AuthController {
 }
