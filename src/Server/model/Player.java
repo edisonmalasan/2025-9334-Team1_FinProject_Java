@@ -8,16 +8,22 @@ public class Player {
 
     private String password;
 
-    private int score;
+    private int wins;
+
+    private int loses;
+
+    private String createdAt;
     //more can be added if needed
 
     public Player(){}
 
-    public Player(int pID, String u, String p, int s) {
+    public Player(int pID, String u, String p, int s, int l, String cA) {
         this.playerID = pID;
         this.username = u;
         this.password = p;
-        this.score = s;
+        this.wins = s;
+        this.loses = l;
+        this.createdAt = cA;
     }
 
     public int getPlayerID() {
@@ -44,13 +50,21 @@ public class Player {
         this.password = password;
     }
 
-    public int getScore() {
-        return score;
+    public int getWins() {
+        return wins;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setWins(int wins) {
+        this.wins = wins;
     }
+
+    public int getLoses() { return loses; }
+
+    public void setLoses(int loses) { this.loses = loses; }
+
+    public String getCreatedAt() { return createdAt; }
+
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
     @Override
     public boolean equals(Object obj) {
@@ -60,7 +74,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return playerID +", "+ username + ", " + score;
+        return playerID +", "+ username + ", " + wins;
     }
 }
 

@@ -50,6 +50,41 @@ public class DBUtil {
         }
     }
 
+    /**
+     * Returns true if updating of a password is successful
+     * @param username
+     * @param oldPass
+     * @param newPass
+     * @return
+     */
+    public static boolean editPassword(String username, String oldPass, String newPass) {
+        try {
+            String dbOldPass = "";
+            String query1 = "SELECT password FROM player WHERE username = ?";
+            PreparedStatement ps1 = con.prepareStatement(query1);
+            ps1.setString(1, username);
+            ResultSet rs = ps1.executeQuery();
+            if (rs.next()) {
+                dbOldPass = rs.getString(1);
+            }
+            if (dbOldPass.equals(oldPass)) {
+                String query2 = "UPDATE player SET password = ? WHERE username = ?";
+                PreparedStatement ps2 = con.prepareStatement(query2);
+                ps2.setString(1, newPass);
+                ps2.setString(2, username);
+                ps2.executeUpdate();
+                return true;
+            }
+        } catch (SQLException SQLe) {
+            SQLe.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+
+
+
     public static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
