@@ -1,3 +1,5 @@
+package service;
+
 import common.client.ClientCallback;
 import common.client.admin.AdminRequestType;
 import common.client.admin.AdminServicePOA;

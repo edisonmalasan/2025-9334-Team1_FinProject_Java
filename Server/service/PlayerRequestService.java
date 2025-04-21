@@ -1,8 +1,11 @@
+package service;
+
 import common.client.ClientCallback;
 import common.client.player.PlayerRequestType;
 import common.client.player.PlayerServicePOA;
 import common.referenceClasses.GameLobby;
 import common.referenceClasses.Player;
+import controller.GameLobbyHandler;
 import org.omg.CORBA.ORB;
 
 import java.util.Arrays;

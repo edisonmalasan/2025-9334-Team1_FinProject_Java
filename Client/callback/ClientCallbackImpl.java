@@ -1,3 +1,6 @@
+package callback;
+
+import common.ClientControllerObserver;
 import common.client.ClientCallbackPOA;
 import common.referenceClasses.ValuesList;
 

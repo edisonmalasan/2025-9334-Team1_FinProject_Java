@@ -1,12 +1,16 @@
+package main;
+
 import common.client.player.PlayerService;
 import common.client.player.PlayerServiceHelper;
 import common.game_logic.Game;
 import common.game_logic.GameHelper;
+import controller.GameImpl;
 import org.omg.CosNaming.*;
 
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
+import service.PlayerRequestService;
 
 public class GameServer {
     public static ORB orb;

@@ -1,8 +1,9 @@
+package controller;
+
 import common.game_logic.GamePOA;
 import common.referenceClasses.GameLobby;
 import common.referenceClasses.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;

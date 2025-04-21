@@ -1,3 +1,6 @@
+package controller;
+
+import common.ClientControllerObserver;
 import common.game_logic.Game;
 import common.referenceClasses.Player;
 import common.referenceClasses.ValuesList;
@@ -9,6 +12,8 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import Client.*;
+import main.Client;
 
 public class GameController implements ClientControllerObserver {
     private Player player;

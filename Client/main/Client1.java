@@ -1,3 +1,6 @@
+package main;
+
+import callback.ClientCallbackImpl;
 import common.client.ClientCallback;
 import common.client.ClientCallbackHelper;
 import common.client.player.PlayerRequestType;
@@ -6,6 +9,7 @@ import common.client.player.PlayerServiceHelper;
 import common.game_logic.Game;
 import common.game_logic.GameHelper;
 import common.referenceClasses.Player;
+import controller.GameController;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.POA;
