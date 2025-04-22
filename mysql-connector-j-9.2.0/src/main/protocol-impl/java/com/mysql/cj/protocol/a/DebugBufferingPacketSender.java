@@ -62,7 +62,7 @@ public class DebugBufferingPacketSender implements MessageSender<NativePacketPay
 
         StringBuilder packetDump = new StringBuilder(DEBUG_MSG_LEN + NativeConstants.HEADER_LENGTH + packetPayload.length());
 
-        packetDump.append("Client ");
+        packetDump.append(".idea/src1/Client ");
         packetDump.append(packet.toString());
         packetDump.append("--------------------> Server\n");
         packetDump.append("\nPacket payload:\n\n");
