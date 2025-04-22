@@ -2,6 +2,9 @@ package Server.DataAccessObject;
 
 import IDL.common.referenceClasses.Player;
 
+import java.util.Collections;
+import java.util.List;
+
 // TODO: Implement PlayerDAO methods to interact with the 'players' table using JDBC, including querying by username and mapping results to Player model objects.
 public class PlayerDAO {
 
