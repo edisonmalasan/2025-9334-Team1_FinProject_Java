@@ -31,25 +31,3 @@ CREATE TABLE games (
                        FOREIGN KEY (player1_id) REFERENCES players(id),
                        FOREIGN KEY (player2_id) REFERENCES players(id)
 );
-
--- Game rounds table
-CREATE TABLE game_rounds (
-                             id VARCHAR(36) PRIMARY KEY,
-                             game_id VARCHAR(36) NOT NULL,
-                             round_number INT NOT NULL,
-                             word VARCHAR(50) NOT NULL,
-                             player1_guesses VARCHAR(255),
-                             player2_guesses VARCHAR(255),
-                             winner_id VARCHAR(36),
-                             completed_at TIMESTAMP,
-                             FOREIGN KEY (game_id) REFERENCES games(id),
-                             FOREIGN KEY (winner_id) REFERENCES players(id)
-);
-
--- Game settings table
-CREATE TABLE game_settings (
-                               id INT PRIMARY KEY DEFAULT 1,
-                               wait_time_seconds INT NOT NULL DEFAULT 10,
-                               round_duration_seconds INT NOT NULL DEFAULT 30,
-                               CONSTRAINT single_row CHECK (id = 1)
-);
