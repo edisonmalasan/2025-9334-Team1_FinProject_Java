@@ -1,5 +1,14 @@
 package Server.database;
 
+import java.util.Properties;
+
 public class DatabaseConfig {
-    // TODO: A class for loading and managing database configuration settings
+    public static final String DB_URL = "jdbc:mysql://localhost:3306/";
+    public static final String DB_USER = "root";
+    public static final String DB_PASSWORD = "";
+    public static final String DB_DRIVER = "com.mysql.jdbc.Driver";
+
+    // private construct to prevent instance
+    private DatabaseConfig() {
+    }
 }
