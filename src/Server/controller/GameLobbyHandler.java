@@ -4,9 +4,9 @@ import common.client.ClientCallback;
 import common.referenceClasses.GameLobby;
 import common.referenceClasses.Player;
 import common.referenceClasses.ValuesList;
-import main.GameServer;
+import Server.main.GameServer;
 import org.omg.CORBA.*;
-import util.WordGenerator;
+import Server.util.WordGenerator;
 
 import java.lang.Object;
 import java.util.ArrayList;

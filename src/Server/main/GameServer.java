@@ -1,9 +1,9 @@
 package Server.main;
 
-import common.client.player.PlayerService;
-import common.client.player.PlayerServiceHelper;
-import common.game_logic.Game;
-import common.game_logic.GameHelper;
+import IDL.common.client.player.PlayerService;
+import IDL.common.client.player.PlayerServiceHelper;
+import IDL.common.game_logic.Game;
+import IDL.common.game_logic.GameHelper;
 import Server.controller.GameImpl;
 import org.omg.CosNaming.*;
 

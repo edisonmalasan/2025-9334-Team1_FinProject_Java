@@ -73,7 +73,6 @@ public class PlayerRequestService extends PlayerServicePOA {
                 break;
             }
         }
-
     }
     public void getLeaderboard() {
 

@@ -1,9 +1,10 @@
 package Client.Player.controller;
 
-import common.ClientControllerObserver;
-import common.game_logic.Game;
+import Client.common.ClientControllerObserver;
 import common.referenceClasses.Player;
 import common.referenceClasses.ValuesList;
+import Client.common.ClientControllerObserver;
+import common.game_logic.Game;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import main.Client;
+import Client.main.Client;
 
 public class GameController implements ClientControllerObserver {
     private Player player;

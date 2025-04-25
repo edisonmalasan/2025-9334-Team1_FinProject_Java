@@ -1,6 +1,6 @@
 package Server.DataAccessObject;
 
-import IDL.common.referenceClasses.Player;
+import common.referenceClasses.Player;
 
 import java.util.Collections;
 import java.util.List;

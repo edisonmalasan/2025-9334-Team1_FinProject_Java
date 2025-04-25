@@ -1,6 +1,6 @@
 package Client.common.callback;
 
-import common.ClientControllerObserver;
+import Client.common.ClientControllerObserver;
 import common.client.ClientCallbackPOA;
 import common.referenceClasses.ValuesList;
 
