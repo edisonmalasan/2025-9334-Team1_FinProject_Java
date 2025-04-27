@@ -50,11 +50,11 @@ public class GameImpl extends GamePOA {
     }
 
     public Player[] setScores(GameLobby gameLobby) {
-//        for (Player player : gameLobby.players) {
-//            if (player.time == 0) {
-//                return gameLobby.players;
-//            }
-//        }
+        for (Player player : gameLobby.players) {
+            if (player.time == 0) {
+                return gameLobby.players;
+            }
+        }
         List<Player> sortedByTime = Arrays.stream(gameLobby.players)
                 .sorted(Comparator.comparingInt((Player p) -> p.time).reversed())
                 .collect(Collectors.toList());

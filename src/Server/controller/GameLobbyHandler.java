@@ -16,10 +16,11 @@ import java.util.Random;
 public class GameLobbyHandler {
     public static List<GameLobby> gameLobbies = new ArrayList<>();
     public static List<GameLobby> waitingLobbies = new ArrayList<>();
+    public static List<String> previousWords = new ArrayList<>();
     public static boolean checker = false;
     public static String word = "";
     private static ORB orb = GameServer.orb;
-    public synchronized static void countdown(GameLobby gameLobby, int time) {
+    public synchronized static int countdown(GameLobby gameLobby, int time) {
         for (int i = time; i != -1; i--){
             gameLobby.waitingTime = i;
             System.out.println("Waiting time: " + i);
@@ -33,15 +34,25 @@ public class GameLobbyHandler {
             System.out.println(player.username);
         }
         waitingLobbies.remove(gameLobby);
+        return 0;
     }
 
     public static void startRound(GameLobby gameLobby, ClientCallback callback) {
         Random random = new Random();
         int randomNumber = random.nextInt(16) + 6;
-        if (gameLobby.players != null) {  // Checker to ensure that only one word is generated for all players
+
+        // Checker to ensure that only one word is generated for all players
+        if (gameLobby.players != null) {
             word = WordGenerator.generateWord(randomNumber);
+
+            // Check if word has already been used
+            while (previousWords.contains(word))
+                word = WordGenerator.generateWord(randomNumber);
+
             System.out.println("Word to be guessed: " + word);
         }
+
+        // Build list and send to clients via callback
         ValuesList list = buildList(word);
         callback._notify(list);
     }
