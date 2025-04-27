@@ -1,6 +1,6 @@
 package Server.DataAccessObject;
 
-import common.referenceClasses.Player;
+import Server.WhatsTheWord.referenceClasses.Player;
 
 import java.util.Collections;
 import java.util.List;
