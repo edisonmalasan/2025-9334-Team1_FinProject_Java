@@ -1,9 +1,9 @@
 package Server.service;
 
-import common.client.ClientCallback;
-import common.client.admin.AdminRequestType;
-import common.client.admin.AdminServicePOA;
-import common.referenceClasses.Admin;
+import Server.WhatsTheWord.client.ClientCallback;
+import Server.WhatsTheWord.client.admin.AdminRequestType;
+import Server.WhatsTheWord.client.admin.AdminServicePOA;
+import Server.WhatsTheWord.referenceClasses.Admin;
 
 public class AdminRequestService extends AdminServicePOA {
     // TODO: Implement DAO and other methods (Follow PlayerRequestService format)
