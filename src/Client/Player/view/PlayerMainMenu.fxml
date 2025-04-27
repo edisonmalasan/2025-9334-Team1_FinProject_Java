@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="base" prefHeight="660.0" prefWidth="1024.0" style="-fx-background-color: #242424;"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerMainMenu">
+<AnchorPane id="base" prefHeight="662.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerMainMenu">
     <children>
         <HBox prefHeight="660.0" prefWidth="1024.0">
             <children>
@@ -32,17 +31,17 @@
                                         <Font name="Silkscreen" size="30.0" />
                                     </font>
                                 </Label>
-                                <TextField id="usernamePlaceholder" layoutX="26.0" layoutY="167.0" prefHeight="40.0" prefWidth="384.0" />
-                                <Button id="enterBttn" layoutX="153.0" layoutY="341.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="134.0" style="-fx-background-color: #6A1908; -fx-border-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 12; -fx-border-width: 2;" text="Enter" textFill="WHITE">
-                                    <font>
-                                        <Font name="Silkscreen" size="24.0" />
-                                    </font></Button>
+                                <TextField id="usernamePlaceholder" layoutX="26.0" layoutY="167.0" prefHeight="40.0" prefWidth="384.0" promptText="Enter Username" />
                                 <Label layoutX="26.0" layoutY="229.0" prefHeight="27.0" prefWidth="384.0" text="PASSWORD">
                                     <font>
                                         <Font name="Silkscreen" size="30.0" />
                                     </font>
                                 </Label>
-                                <TextField id="passPlaceholder" layoutX="26.0" layoutY="264.0" prefHeight="40.0" prefWidth="384.0" />
+                        <PasswordField id="passPlaceholder" layoutX="26.0" layoutY="264.0" prefHeight="40.0" prefWidth="384.0" promptText="Enter Password" />
+                                <Button id="enterBttn" layoutX="153.0" layoutY="341.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="134.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="Enter" textFill="WHITE">
+                                    <font>
+                                        <Font name="Silkscreen" size="24.0" />
+                                    </font></Button>
                         <Button id="regBttn" layoutX="166.0" layoutY="395.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="REGISTER" textFill="#7349f5" underline="true">
                            <font>
                               <Font name="Silkscreen" size="16.0" />

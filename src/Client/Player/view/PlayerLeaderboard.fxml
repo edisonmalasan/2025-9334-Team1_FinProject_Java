@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="base" prefHeight="660.0" prefWidth="1024.0" style="-fx-background-color: #242424;"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerLeaderboard">
+<AnchorPane id="base" prefHeight="662.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerLeaderboard">
     <children>
         <ImageView id="base-in" fitHeight="767.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -30,12 +29,12 @@
                         <Font name="Silkscreen" size="24.0" />
                     </font>
                 </Button>
-                <ImageView fitHeight="359.0" fitWidth="859.0" layoutX="92.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="449.0" fitWidth="859.0" layoutX="94.0" layoutY="160.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../../../resources/images/blurred-base.png" />
                     </image>
                 </ImageView>
-                <TableView layoutX="97.0" layoutY="174.0" prefHeight="272.0" prefWidth="849.0" style="-fx-background-color: transparent; -fx-border-radius: 10;">
+                <TableView layoutX="100.0" layoutY="163.0" prefHeight="385.0" prefWidth="847.0" style="-fx-background-color: transparent; -fx-border-radius: 10;">
                     <columns>
                         <TableColumn prefWidth="116.0" text="RANK" />
                         <TableColumn prefWidth="626.0" text="USERNAME" />
