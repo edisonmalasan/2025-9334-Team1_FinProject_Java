@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="base" prefHeight="660.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerLeaderboard">
+    <children>
+        <ImageView id="base-in" fitHeight="767.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../../resources/images/!-game-base.png" />
+            </image>
+        </ImageView>
+        <AnchorPane prefHeight="662.0" prefWidth="1024.0">
+            <children>
+                <Label layoutX="253.0" layoutY="107.0" prefHeight="53.0" prefWidth="519.0" style="-fx-alignment: CENTER;" text="LEADERBOARD" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Silkscreen" size="48.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="53.0" fitWidth="219.0" layoutX="423.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../resources/images/submark.png" />
+                    </image>
+                </ImageView>
+                <Button id="backBttn" layoutX="453.0" layoutY="570.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="121.0" style="-fx-background-color: #6A1908; -fx-border-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 12; -fx-border-width: 2;" text="BACK" textFill="WHITE">
+                    <font>
+                        <Font name="Silkscreen" size="24.0" />
+                    </font>
+                </Button>
+                <ImageView fitHeight="359.0" fitWidth="859.0" layoutX="92.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../resources/images/blurred-base.png" />
+                    </image>
+                </ImageView>
+                <TableView layoutX="97.0" layoutY="174.0" prefHeight="272.0" prefWidth="849.0" style="-fx-background-color: transparent; -fx-border-radius: 10;">
+                    <columns>
+                        <TableColumn prefWidth="116.0" text="RANK" />
+                        <TableColumn prefWidth="626.0" text="USERNAME" />
+                        <TableColumn prefWidth="116.0" text="POINTS" />
+                    </columns>
+                </TableView>
+            </children>
+        </AnchorPane>
+
+    </children>
+</AnchorPane>
