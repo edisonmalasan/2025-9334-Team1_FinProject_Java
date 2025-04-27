@@ -42,7 +42,7 @@ public class Client {
             callback = ClientCallbackHelper.narrow(ref);
 
             player = new Player(0,"Test","Tester",0,0,-1,false);
-            GameController gameController = new GameController(player);
+            GameController gameController = new GameController();
             callbackImpl.addObserver(gameController);
             playerService.request(PlayerRequestType.START_GAME,player,callback);
 
