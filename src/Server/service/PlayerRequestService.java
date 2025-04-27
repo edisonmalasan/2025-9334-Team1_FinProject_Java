@@ -1,10 +1,10 @@
 package Server.service;
 
-import common.client.ClientCallback;
-import common.client.player.PlayerRequestType;
-import common.client.player.PlayerServicePOA;
-import common.referenceClasses.GameLobby;
-import common.referenceClasses.Player;
+import Server.WhatsTheWord.client.ClientCallback;
+import Server.WhatsTheWord.client.player.PlayerRequestType;
+import Server.WhatsTheWord.client.player.PlayerServicePOA;
+import Server.WhatsTheWord.referenceClasses.GameLobby;
+import Server.WhatsTheWord.referenceClasses.Player;
 import Server.controller.GameLobbyHandler;
 import org.omg.CORBA.ORB;
 
@@ -13,13 +13,13 @@ import java.util.stream.Stream;
 
 public class PlayerRequestService extends PlayerServicePOA {
     @Override
-    public void request(PlayerRequestType type, Player player, ClientCallback callback) {
+    public void request(PlayerRequestType type, Player player, ClientCallback playerCallback) {
         if (type.equals(PlayerRequestType.REGISTER)) {
             register();
         } else if (type.equals(PlayerRequestType.LOGIN)) {
             login();
         } else if (type.equals(PlayerRequestType.START_GAME)) {
-            startGame(player, callback);
+            startGame(player, playerCallback);
         } else if (type.equals(PlayerRequestType.GET_LEADERBOARD)) {
             getLeaderboard();
         }
@@ -77,4 +77,5 @@ public class PlayerRequestService extends PlayerServicePOA {
     public void getLeaderboard() {
 
     }
+
 }

@@ -1,9 +1,9 @@
 package Server.controller;
 
-import common.client.ClientCallback;
-import common.referenceClasses.GameLobby;
-import common.referenceClasses.Player;
-import common.referenceClasses.ValuesList;
+import Server.WhatsTheWord.client.ClientCallback;
+import Server.WhatsTheWord.referenceClasses.GameLobby;
+import Server.WhatsTheWord.referenceClasses.Player;
+import Server.WhatsTheWord.referenceClasses.ValuesList;
 import Server.main.GameServer;
 import org.omg.CORBA.*;
 import Server.util.WordGenerator;

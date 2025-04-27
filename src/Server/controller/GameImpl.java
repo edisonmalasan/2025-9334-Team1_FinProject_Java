@@ -1,8 +1,8 @@
 package Server.controller;
 
-import common.game_logic.GamePOA;
-import common.referenceClasses.GameLobby;
-import common.referenceClasses.Player;
+import Server.WhatsTheWord.game_logic.GamePOA;
+import Server.WhatsTheWord.referenceClasses.GameLobby;
+import Server.WhatsTheWord.referenceClasses.Player;
 
 import java.util.Arrays;
 import java.util.Comparator;

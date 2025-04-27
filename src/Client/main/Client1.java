@@ -1,14 +1,14 @@
 package Client.main;
 
 import Client.common.callback.ClientCallbackImpl;
-import common.client.ClientCallback;
-import common.client.ClientCallbackHelper;
-import common.client.player.PlayerRequestType;
-import common.client.player.PlayerService;
-import common.client.player.PlayerServiceHelper;
-import common.game_logic.Game;
-import common.game_logic.GameHelper;
-import common.referenceClasses.Player;
+import Client.WhatsTheWord.client.ClientCallback;
+import Client.WhatsTheWord.client.ClientCallbackHelper;
+import Client.WhatsTheWord.client.player.PlayerRequestType;
+import Client.WhatsTheWord.client.player.PlayerService;
+import Client.WhatsTheWord.client.player.PlayerServiceHelper;
+import Client.WhatsTheWord.game_logic.Game;
+import Client.WhatsTheWord.game_logic.GameHelper;
+import Client.WhatsTheWord.referenceClasses.Player;
 import Client.Player.controller.GameController;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;

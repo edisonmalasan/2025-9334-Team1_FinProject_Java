@@ -1,6 +1,6 @@
 package Client.common;
 
-import common.referenceClasses.ValuesList;
+import Client.WhatsTheWord.referenceClasses.ValuesList;
 
 public interface ClientControllerObserver {
     public void update (ValuesList list);

@@ -1,8 +1,8 @@
 package Client.common.callback;
 
+import Client.WhatsTheWord.client.ClientCallbackPOA;
+import Client.WhatsTheWord.referenceClasses.ValuesList;
 import Client.common.ClientControllerObserver;
-import common.client.ClientCallbackPOA;
-import common.referenceClasses.ValuesList;
 
 import java.util.ArrayList;
 import java.util.List;

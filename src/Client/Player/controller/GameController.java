@@ -1,10 +1,10 @@
 package Client.Player.controller;
 
+import Client.WhatsTheWord.game_logic.Game;
+import Client.WhatsTheWord.referenceClasses.Player;
+import Client.WhatsTheWord.referenceClasses.ValuesList;
 import Client.common.ClientControllerObserver;
-import common.referenceClasses.Player;
-import common.referenceClasses.ValuesList;
-import Client.common.ClientControllerObserver;
-import common.game_logic.Game;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
