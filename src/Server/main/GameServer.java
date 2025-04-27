@@ -1,9 +1,9 @@
 package Server.main;
 
-import IDL.common.client.player.PlayerService;
-import IDL.common.client.player.PlayerServiceHelper;
-import IDL.common.game_logic.Game;
-import IDL.common.game_logic.GameHelper;
+import Server.WhatsTheWord.client.player.PlayerService;
+import Server.WhatsTheWord.client.player.PlayerServiceHelper;
+import Server.WhatsTheWord.game_logic.Game;
+import Server.WhatsTheWord.game_logic.GameHelper;
 import Server.controller.GameImpl;
 import org.omg.CosNaming.*;
 

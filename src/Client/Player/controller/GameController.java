@@ -18,10 +18,8 @@ import Client.main.Client;
 
 public class GameController implements ClientControllerObserver {
     private Player player;
-    Scanner scanner = new Scanner(System.in);
     private static volatile boolean gameOver = false;
-    public GameController(Player player) {
-        this.player = player;
+    public GameController() {
     }
     public static Game game = Client.game;
 
@@ -31,7 +29,7 @@ public class GameController implements ClientControllerObserver {
         Set<Character> guessedLetters = new HashSet<>();
         final int[] lives = {5};
         gameOver = false;
-        Player currentPlayer = new Player(0,"Test123","Tester",0,0,-1,false);;
+        Player currentPlayer = new Player(0,"Test123","Tester",0,0,-1,false);
 
         // Start 30-second timer
         Thread timerThread = new Thread(() -> {

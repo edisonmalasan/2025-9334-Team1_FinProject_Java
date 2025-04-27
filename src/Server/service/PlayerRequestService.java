@@ -44,17 +44,26 @@ public class PlayerRequestService extends PlayerServicePOA {
             GameLobbyHandler.gameLobbies.add(newGameLobby);
             GameLobbyHandler.waitingLobbies.add(newGameLobby);
             gameLobby = newGameLobby;
-            while (newGameLobby.waitingTime!=0) {
-//                System.out.println("Waiting for players...");
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
+
+//            while (newGameLobby.waitingTime!=0) {
+//                System.out.println("Waiting for players...");
+//
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+
         } else {
             joinGame(player);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException();
+            }
         }
         while (gameLobby.winner == null) {
             GameLobbyHandler.startRound(gameLobby, callback);
@@ -68,10 +77,14 @@ public class PlayerRequestService extends PlayerServicePOA {
                 Player[] original = gameLobby.players;
                 gameLobby.players = Stream.concat(Arrays.stream(original), Stream.of(player)).toArray(Player[]::new);
             }
-            if (gameLobby.waitingTime == 10) {
-                GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
-                break;
+            while (gameLobby.waitingTime != 0) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException();
+                }
             }
+            break;
         }
     }
     public void getLeaderboard() {
