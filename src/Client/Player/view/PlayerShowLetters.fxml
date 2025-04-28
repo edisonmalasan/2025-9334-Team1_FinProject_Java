@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.view.PlayerMatchMaking">
+<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerShowLetters">
    <children>
       <ImageView fitHeight="662.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -29,14 +29,14 @@
                   <Font name="Silkscreen Bold" size="72.0" />
                </font>
             </Label>
-            <Label layoutX="301.0" layoutY="121.0" style="-fx-alignment: CENTER;" text="YOUR WORD CONSISTS OF..." textAlignment="CENTER" textFill="WHITE">
+            <Label layoutX="275.0" layoutY="121.0" prefHeight="27.0" prefWidth="474.0" style="-fx-alignment: CENTER;" text="YOUR WORD CONSISTS OF..." textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font name="Silkscreen Bold" size="24.0" />
+                  <Font name="Silkscreen" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="449.0" layoutY="255.0" style="-fx-alignment: CENTER;" text="LETTERS" textFill="WHITE">
+            <Label layoutX="272.0" layoutY="255.0" prefHeight="27.0" prefWidth="474.0" style="-fx-alignment: CENTER;" text="LETTERS" textFill="WHITE">
                <font>
-                  <Font name="Silkscreen Bold" size="24.0" />
+                  <Font name="Silkscreen" size="24.0" />
                </font>
             </Label>
          </children>

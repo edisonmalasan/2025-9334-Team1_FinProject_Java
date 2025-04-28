@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerGameProper">
+   <children>
+      <ImageView fitHeight="662.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../resources/images/!-game-base.png" />
+         </image>
+      </ImageView>
+
+      <Pane layoutY="230.0" prefHeight="432.0" prefWidth="452.0" />
+      <Button id="forfeitBttn" layoutX="453.0" layoutY="570.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="150.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="FORFEIT" textFill="WHITE">
+         <font>
+            <Font name="Silkscreen" size="24.0" />
+         </font>
+      </Button>
+      <Pane layoutY="16.0" prefHeight="100.0" prefWidth="1024.0">
+         <children>
+            <ImageView fitHeight="66.0" fitWidth="244.0" layoutX="-4.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../resources/images/user-subcard.png" />
+               </image>
+            </ImageView>
+            <Label id="displayRound" layoutX="321.0" layoutY="23.0" prefHeight="58.0" prefWidth="383.0" style="-fx-alignment: CENTER;" text="LABEL" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="48.0" />
+               </font>
+            </Label>
+            <Label id="displayUsername" layoutX="55.0" layoutY="29.0" prefHeight="41.0" prefWidth="167.0" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Label>
+            <ImageView id="displayPfp" fitHeight="41.0" fitWidth="42.0" layoutX="7.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../resources/images/profile-alien.png" />
+               </image>
+            </ImageView>
+            <Label id="displayOpp" alignment="CENTER_RIGHT" layoutX="843.0" layoutY="10.0" prefHeight="27.0" prefWidth="181.0" style="-fx-alignment: RIGHT;" text="Label" textAlignment="RIGHT" textFill="WHITE" underline="true" wrapText="true">
+               <font>
+                  <Font name="Montserrat Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutY="106.0" prefHeight="444.0" prefWidth="1024.0">
+         <children>
+            <ImageView fitHeight="442.0" fitWidth="872.0" layoutX="85.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../resources/images/display-card.png" />
+               </image>
+            </ImageView>
+            <Label id="displayTimer" layoutX="437.0" layoutY="37.0" prefHeight="34.0" prefWidth="150.0" style="-fx-alignment: CENTER;" text="Label" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="30.0" />
+               </font>
+            </Label>
+            <Label layoutX="106.0" layoutY="403.0" text="GUESSES LEFT:" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Label>
+            <Label id="displayGuesses" layoutX="298.0" layoutY="403.0" prefHeight="27.0" prefWidth="84.0" text="LABEL" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Label>
+            <Pane id="lettersPane" layoutX="92.0" layoutY="148.0" prefHeight="146.0" prefWidth="839.0">
+               <children>
+                  <Label id="displayLetter" layoutX="367.0" layoutY="16.0" prefHeight="114.0" prefWidth="106.0" style="-fx-alignment: CENTER; -fx-border-color: #FFAB24; -fx-border-width: 0 0 5 0;" text="A" textAlignment="CENTER" textFill="#ffab24">
+                     <font>
+                        <Font name="Silkscreen Bold" size="96.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane layoutX="92.0" layoutY="293.0" prefHeight="106.0" prefWidth="839.0">
+               <children>
+                  <Label layoutX="282.0" layoutY="13.0" prefHeight="25.0" prefWidth="275.0" style="-fx-alignment: CENTER;" text="ENTER A LETTER:" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="Silkscreen" size="24.0" />
+                     </font>
+                  </Label>
+                  <TextField id="letterField" layoutX="314.0" layoutY="49.0" prefHeight="41.0" prefWidth="123.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #FFAB24; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 2;" text="Enter a Letter">
+                     <font>
+                        <Font name="Inter Italic" size="11.0" />
+                     </font>
+                  </TextField>
+                  <Button id="sendBttn" layoutX="447.0" layoutY="49.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="78.0" style="-fx-background-color: #037A53; -fx-border-color: #FFFFFF; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-width: 2;" text="SEND" textFill="WHITE">
+                     <font>
+                        <Font name="Silkscreen" size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
