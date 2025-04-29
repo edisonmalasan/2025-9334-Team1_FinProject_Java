@@ -1,17 +1,28 @@
 package Server.service;
 
+import Server.DataAccessObject.PlayerDAO;
 import Server.WhatsTheWord.client.ClientCallback;
 import Server.WhatsTheWord.client.player.PlayerRequestType;
 import Server.WhatsTheWord.client.player.PlayerServicePOA;
 import Server.WhatsTheWord.referenceClasses.GameLobby;
 import Server.WhatsTheWord.referenceClasses.Player;
 import Server.controller.GameLobbyHandler;
+import Server.util.PasswordHashUtility;
 import org.omg.CORBA.ORB;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.stream.Stream;
 
 public class PlayerRequestService extends PlayerServicePOA {
+    private PlayerDAO playerDao;
+
+    public PlayerRequestService() {
+    }
+    public PlayerRequestService(PlayerDAO playerDAO) {
+        this.playerDao = playerDAO;
+    }
     @Override
     public void request(PlayerRequestType type, Player player, ClientCallback playerCallback) {
         if (type.equals(PlayerRequestType.REGISTER)) {
@@ -89,6 +100,13 @@ public class PlayerRequestService extends PlayerServicePOA {
     }
     public void getLeaderboard() {
 
+    }
+
+    public String generateSessionToken() {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] bytes = new byte[64];
+        secureRandom.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
 }
