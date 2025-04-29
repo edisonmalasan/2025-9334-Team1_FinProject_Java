@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerGameProper">
+<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerGameProper">
    <children>
       <ImageView fitHeight="662.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -19,7 +14,7 @@
       </ImageView>
 
       <Pane layoutY="230.0" prefHeight="432.0" prefWidth="452.0" />
-      <Button fx:id="forfeitButton" layoutX="453.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleForfeit" prefHeight="43.0" prefWidth="150.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="FORFEIT" textFill="WHITE">
+      <Button id="forfeitBttn" fx:id="forfeitButton" layoutX="453.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleForfeit" prefHeight="43.0" prefWidth="150.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="FORFEIT" textFill="WHITE">
          <font>
             <Font name="Silkscreen" size="24.0" />
          </font>
@@ -31,17 +26,17 @@
                   <Image url="@../../../../resources/images/user-subcard.png" />
                </image>
             </ImageView>
-            <Label fx:id="displayRound" layoutX="321.0" layoutY="23.0" prefHeight="58.0" prefWidth="383.0" style="-fx-alignment: CENTER;" text="Round" textAlignment="CENTER" textFill="WHITE">
+            <Label id="displayRound" fx:id="displayRound" layoutX="321.0" layoutY="23.0" prefHeight="58.0" prefWidth="383.0" style="-fx-alignment: CENTER;" text="Round" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Silkscreen" size="48.0" />
                </font>
             </Label>
-            <Label fx:id="displayUsername" layoutX="55.0" layoutY="29.0" prefHeight="41.0" prefWidth="167.0" text="Label" textFill="WHITE">
+            <Label id="displayUser" fx:id="displayUsername" layoutX="55.0" layoutY="29.0" prefHeight="41.0" prefWidth="167.0" text="Label" textFill="WHITE">
                <font>
-                  <Font name="Silkscreen" size="24.0" />
+                  <Font name="Montserrat Bold" size="18.0" />
                </font>
             </Label>
-            <ImageView fx:id="displayPfp" fitHeight="41.0" fitWidth="42.0" layoutX="7.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView id="displayPfp" fx:id="displayPfp" fitHeight="41.0" fitWidth="42.0" layoutX="7.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../resources/images/profile-alien.png" />
                </image>
@@ -55,7 +50,7 @@
                   <Image url="@../../../../resources/images/display-card.png" />
                </image>
             </ImageView>
-            <Label fx:id="displayTimer" layoutX="437.0" layoutY="37.0" prefHeight="34.0" prefWidth="150.0" style="-fx-alignment: CENTER;" text="0:30" textAlignment="CENTER" textFill="WHITE">
+            <Label id="displayTime" fx:id="displayTimer" layoutX="437.0" layoutY="37.0" prefHeight="34.0" prefWidth="150.0" style="-fx-alignment: CENTER;" text="0:30" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Silkscreen" size="30.0" />
                </font>
@@ -65,14 +60,14 @@
                   <Font name="Silkscreen" size="24.0" />
                </font>
             </Label>
-            <Label fx:id="displayGuesses" layoutX="269.0" layoutY="403.0" prefHeight="27.0" prefWidth="84.0" text="1" textFill="WHITE">
+            <Label fx:id="displayGuesses" layoutX="312.0" layoutY="403.0" prefHeight="35.0" prefWidth="95.0" text="1" textFill="WHITE">
                <font>
                   <Font name="Silkscreen" size="24.0" />
                </font>
             </Label>
             <HBox fx:id="lettersHbox" alignment="CENTER" layoutX="106.0" layoutY="149.0" prefHeight="146.0" prefWidth="811.0">
                <children>
-                  <Label fx:id="displayLetter" layoutX="367.0" layoutY="16.0" prefHeight="114.0" prefWidth="83.0" style="-fx-alignment: CENTER; -fx-border-color: #FFAB24; -fx-border-width: 0 0 5 0;" text="A" textAlignment="CENTER" textFill="#ffab24">
+                  <Label id="displayLetter" fx:id="displayLetter" layoutX="367.0" layoutY="16.0" prefHeight="114.0" prefWidth="83.0" style="-fx-alignment: CENTER; -fx-border-color: #FFAB24; -fx-border-width: 0 0 5 0;" text="A" textAlignment="CENTER" textFill="#ffab24">
                      <font>
                         <Font name="Silkscreen Bold" size="96.0" />
                      </font>
@@ -86,12 +81,12 @@
                         <Font name="Silkscreen" size="24.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="letterField" layoutX="314.0" layoutY="49.0" prefHeight="41.0" prefWidth="123.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #FFAB24; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 2;" text="Enter a Letter">
+                  <TextField id="letterField" fx:id="letterField" layoutX="314.0" layoutY="49.0" prefHeight="41.0" prefWidth="123.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #FFAB24; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-width: 2;" text="Enter a Letter">
                      <font>
                         <Font name="Inter Italic" size="11.0" />
                      </font>
                   </TextField>
-                  <Button fx:id="sendButton" layoutX="447.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleSend" prefHeight="41.0" prefWidth="78.0" style="-fx-background-color: #037A53; -fx-border-color: #FFFFFF; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-width: 2;" text="SEND" textFill="WHITE">
+                  <Button id="sendBttn" fx:id="sendButton" layoutX="447.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleSend" prefHeight="41.0" prefWidth="78.0" style="-fx-background-color: #037A53; -fx-border-color: #FFFFFF; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-width: 2;" text="SEND" textFill="WHITE">
                      <font>
                         <Font name="Silkscreen" size="16.0" />
                      </font>

@@ -14,7 +14,7 @@
         </ImageView>
         <AnchorPane prefHeight="662.0" prefWidth="1024.0">
             <children>
-                <ImageView fitHeight="171.0" fitWidth="362.0" layoutX="331.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="171.0" fitWidth="362.0" layoutX="331.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../../../../resources/images/logo.png" />
                     </image>
@@ -24,6 +24,16 @@
                         <Font name="Silkscreen" size="24.0" />
                     </font>
                 </Button>
+            <Button id="leaderboardBttn" layoutX="385.0" layoutY="393.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="255.0" style="-fx-background-color: #7349F5; -fx-border-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 12; -fx-border-width: 2;" text="LEADERBOARDS" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Button>
+            <Button id="startBttn" layoutX="385.0" layoutY="325.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="255.0" style="-fx-background-color: #037A53; -fx-border-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 12; -fx-border-width: 2;" text="START GAME" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Button>
             </children>
         </AnchorPane>
 
