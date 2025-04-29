@@ -18,7 +18,7 @@ public final class Player implements org.omg.CORBA.portable.IDLEntity
   public int time = (int)0;
   public boolean hasPlayed = false;
 
-  public Player ()
+  public Player (int anInt, String string, String rsString, int rsInt, boolean aBoolean)
   {
   } // ctor
 

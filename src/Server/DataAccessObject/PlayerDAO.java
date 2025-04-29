@@ -6,6 +6,7 @@ import Server.exception.DataAccessException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 public class PlayerDAO {
 
     public void create(Player player) throws DataAccessException {
-        String query = "INSERT INTO player (username, password, wins, noOfWins, time, hasPlayed)" + "VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO player (username, password, wins, hasPlayed)" + "VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
@@ -22,35 +23,84 @@ public class PlayerDAO {
             statement.setString(1, player.username);
             statement.setString(2, player.password);
             statement.setInt(3, player.wins);
-            statement.setInt(4, player.noOfRoundWins);
-            statement.setInt(5, player.time);
-            statement.setBoolean(6, player.hasPlayed);
+            statement.setBoolean(4, player.hasPlayed);
 
             statement.executeUpdate();
-
         } catch (SQLException e) {
             throw new DataAccessException("Failed to create player");
         }
     }
 
     public Player findByUsername(String username) {
-        return null;
+        Player p = null;
+        String query = "SELECT * FROM player WHERE username = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement prepstmt = connection.prepareStatement(query)) {
+
+            prepstmt.setString(1, username);
+            ResultSet rs = prepstmt.executeQuery();
+            while(rs.next()){
+                p = new Player(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to fetch player");
+        }
+        return p;
     }
 
     public Player findById(String id) {
-        return null;
+        Player p = null;
+        String query = "SELECT * FROM player WHERE pId = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement prepstmt = connection.prepareStatement(query)) {
+
+            prepstmt.setInt(1, Integer.parseInt(id));
+            ResultSet rs = prepstmt.executeQuery();
+            while(rs.next()){
+                p = new Player(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to fetch player");
+        }
+        return p;
     }
 
     public Player save(Player player) {
         return null;
     }
 
-    public void update(Player player) {
+    public void update(Player player, String username) {
+        String query = "UPDATE contact SET username=?, password=?, wins=?, hasPlayed=? WHERE username=?";
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, player.username);
+            statement.setString(2, player.password);
+            statement.setInt(3, player.wins);
+            statement.setBoolean(4, player.hasPlayed);
+            statement.setString(5, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to update player");
+        }
     }
 
     public void delete(String username) {
+        String query = "DELETE FROM player WHERE username = ?";
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, username);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to delete player");
+        }
     }
 
     public List<Player> findAll() {
