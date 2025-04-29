@@ -13,7 +13,7 @@ public class AdminDAO {
      * @return
      */
     public static boolean checkPlayerAccount(String userName, String password) {
-        String query = "SELECT CONCAT(`prefix`,`id`) AS 'Player ID', `username`, `password` FROM `player` FROM player WHERE username = ? AND password = ?";
+        String query = "SELECT `pId` AS 'Player ID', `username`, `password` FROM `player` FROM player WHERE username = ? AND password = ?";
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement prepstmt = con.prepareStatement(query)) {
             prepstmt.setString(1, userName);
@@ -37,7 +37,7 @@ public class AdminDAO {
      * @param newInfo
      * @return
      */
-    public static boolean editPlayerInfo(String username, String toEdit, String newInfo) {
+    public static boolean editPlayerName(String username, String toEdit, String newInfo) {
         if (!(toEdit.equalsIgnoreCase("username"))) {
             return false;
         }
@@ -53,5 +53,19 @@ public class AdminDAO {
         }
     }
 
-
+    public static boolean editPlayerPassword(String password, String toEdit, String newInfo) {
+        if (!(toEdit.equalsIgnoreCase("username"))) {
+            return false;
+        }
+        String query = "UPDATE player SET " + toEdit + " = ? WHERE password = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement prepstmt = con.prepareStatement(query)){
+            prepstmt.setString(1, newInfo);
+            prepstmt.setString(2, password);
+            prepstmt.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

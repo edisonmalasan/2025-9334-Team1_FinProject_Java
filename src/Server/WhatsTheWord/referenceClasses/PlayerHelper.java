@@ -92,7 +92,7 @@ abstract public class PlayerHelper
 
   public static Player read (org.omg.CORBA.portable.InputStream istream)
   {
-    Player value = new Player();
+    Player value = new Player(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
     value.playerId = istream.read_long ();
     value.username = istream.read_string ();
     value.password = istream.read_string ();
