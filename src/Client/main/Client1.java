@@ -15,6 +15,8 @@ import org.omg.CORBA.*;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
+import java.util.Properties;
+
 public class Client1 {
     static Game game;
     static PlayerService playerService;
@@ -22,7 +24,12 @@ public class Client1 {
     static Player player;
     public static void main(String[] args) {
         try {
-            ORB orb = ORB.init(args, null);
+// Initialize properties, host and port
+            Properties prop = new Properties();
+            prop.put("org.omg.CORBA.ORBInitialHost", "localhost");
+            prop.put("org.omg.CORBA.ORBInitialPort", "1099");
+
+            ORB orb = ORB.init(args, prop);
 // get the root naming context
             org.omg.CORBA.Object objRef =
                     orb.resolve_initial_references("NameService");

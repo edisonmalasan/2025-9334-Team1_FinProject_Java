@@ -12,11 +12,18 @@ import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
 import Server.service.PlayerRequestService;
 
+import java.util.Properties;
+
 public class GameServer {
     public static ORB orb;
     public static void main(String[] args) {
         try {
-            orb = ORB.init(args, null);
+            // Initialize properties, host and port
+            Properties prop = new Properties();
+            prop.put("org.omg.CORBA.ORBInitialHost", "localhost");
+            prop.put("org.omg.CORBA.ORBInitialPort", "1099");
+
+            orb = ORB.init(args, prop);
 // get reference to rootpoa & activate the POAManager
             POA rootpoa =
                     POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
