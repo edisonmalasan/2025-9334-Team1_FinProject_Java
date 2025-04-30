@@ -1,4 +1,4 @@
-package Client.WhatsTheWord.client.admin;
+package Server.WhatsTheWord.client.admin;
 
 
 /**

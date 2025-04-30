@@ -1,4 +1,4 @@
-package Client.WhatsTheWord.client.admin;
+package WhatsTheWord.client.admin;
 
 
 /**
@@ -8,6 +8,6 @@ package Client.WhatsTheWord.client.admin;
 * Wednesday, April 30, 2025 8:13:25 PM SGT
 */
 
-public interface AdminService extends AdminServiceOperations, org.omg.CORBA.Object, org.omg.CORBA.portable.IDLEntity
+public interface AdminService extends AdminServiceOperations, org.omg.CORBA.Object, org.omg.CORBA.portable.IDLEntity 
 {
 } // interface AdminService
