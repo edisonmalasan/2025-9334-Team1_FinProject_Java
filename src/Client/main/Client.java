@@ -9,7 +9,7 @@ import Client.WhatsTheWord.client.player.PlayerServiceHelper;
 import Client.WhatsTheWord.game_logic.Game;
 import Client.WhatsTheWord.game_logic.GameHelper;
 import Client.WhatsTheWord.referenceClasses.Player;
-import Client.Player.controller.GameController;
+import Client.Player.assets.GameController;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.POA;

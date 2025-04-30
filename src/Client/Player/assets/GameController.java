@@ -1,4 +1,4 @@
-package Client.Player.controller;
+package Client.Player.assets;
 
 import Client.WhatsTheWord.game_logic.Game;
 import Client.WhatsTheWord.referenceClasses.Player;
@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
