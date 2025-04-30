@@ -28,7 +28,7 @@ public class GameController implements ClientControllerObserver {
         Set<Character> guessedLetters = new HashSet<>();
         final int[] lives = {5};
         gameOver = false;
-        Player currentPlayer = new Player(0,"Test123","Tester",0,0,-1,false);
+        Player currentPlayer = new Player(0,"Test","Tester",0,0,-1,false);
 
         // Start 30-second timer
         Thread timerThread = new Thread(() -> {
