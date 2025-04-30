@@ -15,7 +15,7 @@ public class PlayerLogin {
     private Button registerHyperLink;
 
     @FXML
-    private PasswordField userNameField;
+    private PasswordField passwordField;
 
     @FXML
     private TextField userNameTextField;

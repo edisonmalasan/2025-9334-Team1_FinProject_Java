@@ -43,7 +43,7 @@
                                         <Font name="Silkscreen" size="30.0" />
                                     </font>
                                 </Label>
-                        <PasswordField id="passPlaceholder" fx:id="userNameField" layoutX="26.0" layoutY="264.0" prefHeight="40.0" prefWidth="384.0" promptText="Enter Password" />
+                        <PasswordField id="passPlaceholder" fx:id="passwordField" layoutX="26.0" layoutY="264.0" prefHeight="40.0" prefWidth="384.0" promptText="Enter Password" />
                                 <Button id="enterBttn" fx:id="enterButton" layoutX="153.0" layoutY="341.0" mnemonicParsing="false" onAction="#handleEnter" prefHeight="40.0" prefWidth="134.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="Enter" textFill="WHITE">
                                     <font>
                                         <Font name="Silkscreen" size="24.0" />
