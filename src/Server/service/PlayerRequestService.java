@@ -26,9 +26,9 @@ public class PlayerRequestService extends PlayerServicePOA {
     @Override
     public void request(PlayerRequestType type, Player player, ClientCallback playerCallback) {
         if (type.equals(PlayerRequestType.REGISTER)) {
-            register();
+            register(player, playerCallback);
         } else if (type.equals(PlayerRequestType.LOGIN)) {
-            login();
+            login(player, playerCallback);
         } else if (type.equals(PlayerRequestType.START_GAME)) {
             startGame(player, playerCallback);
         } else if (type.equals(PlayerRequestType.GET_LEADERBOARD)) {
@@ -36,12 +36,12 @@ public class PlayerRequestService extends PlayerServicePOA {
         }
     }
 
-    public void register() {
-
+    public void register(Player player, ClientCallback callback) {
+        PlayerDAO.create(player);
     }
 
-    public void login() {
-
+    public void login(Player player, ClientCallback callback) {
+        player = PlayerDAO.findByUsername(player.username);
     }
 
     public void startGame(Player player, ClientCallback callback) {
@@ -57,16 +57,6 @@ public class PlayerRequestService extends PlayerServicePOA {
             gameLobby = newGameLobby;
 
             gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
-
-//            while (newGameLobby.waitingTime!=0) {
-//                System.out.println("Waiting for players...");
-//
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
 
         } else {
             joinGame(player);

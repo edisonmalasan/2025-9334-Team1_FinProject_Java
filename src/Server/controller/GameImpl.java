@@ -36,14 +36,14 @@ public class GameImpl extends GamePOA {
                 }
             }
             gameLobby.players = setScores(gameLobby);
-            gameLobby.winner = checkForWinner(gameLobby);
-            System.out.println(player.username + ": " + player.time + ": " + player.noOfRoundWins); //Testing
+            gameLobby.winner = checkForWinner(gameLobby.players);
 
             if (gameLobby.winner != null) {
                 for (Player playerInLobby : gameLobby.players) {
                     playerInLobby.noOfRoundWins = 0;
                     playerInLobby.time = 0;
                 }
+                System.out.println("Winner: " + gameLobby.winner.username);
                 break;
             }
         }
@@ -55,12 +55,16 @@ public class GameImpl extends GamePOA {
                 return gameLobby.players;
             }
         }
+
         List<Player> sortedByTime = Arrays.stream(gameLobby.players)
                 .sorted(Comparator.comparingInt((Player p) -> p.time).reversed())
                 .collect(Collectors.toList());
-        if (sortedByTime.get(0).time != -1)
-            sortedByTime.get(0).noOfRoundWins += 1;
-        System.out.println(sortedByTime.get(0).username + ": " + sortedByTime.get(0).time);
+
+        if (sortedByTime.get(0).time != -1) {
+            sortedByTime.get(0).noOfRoundWins++;
+        }
+
+        System.out.println("setScores checker: " + sortedByTime.get(0).username + ": " + sortedByTime.get(0).time + ": score: " + sortedByTime.get(0).noOfRoundWins);
         sortedByTime = resetTime(sortedByTime);
         return sortedByTime.toArray(new Player[0]);
     }
@@ -72,10 +76,10 @@ public class GameImpl extends GamePOA {
         return players;
     }
 
-    public Player checkForWinner(GameLobby gameLobby) {
-        for (Player player : gameLobby.players) {
+    public Player checkForWinner(Player[] players) {
+        for (Player player : players) {
             if (player.noOfRoundWins == 3) {
-                player.wins += 1;
+                player.wins++;
                 return player;
             }
         }

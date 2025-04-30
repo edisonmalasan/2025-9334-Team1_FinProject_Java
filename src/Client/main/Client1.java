@@ -27,7 +27,7 @@ public class Client1 {
 // Initialize properties, host and port
             Properties prop = new Properties();
             prop.put("org.omg.CORBA.ORBInitialHost", "localhost");
-            prop.put("org.omg.CORBA.ORBInitialPort", "1099");
+            prop.put("org.omg.CORBA.ORBInitialPort", "10050");
 
             ORB orb = ORB.init(args, prop);
 // get the root naming context

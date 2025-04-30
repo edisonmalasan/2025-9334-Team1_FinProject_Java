@@ -19,14 +19,13 @@ public class GameServer {
     public static void main(String[] args) {
         try {
             // Initialize properties, host and port
-            Properties prop = new Properties();
-            prop.put("org.omg.CORBA.ORBInitialHost", "localhost");
-            prop.put("org.omg.CORBA.ORBInitialPort", "1099");
+//            Properties prop = new Properties();
+//            prop.put("org.omg.CORBA.ORBInitialHost","localhost");
+//            prop.put("org.omg.CORBA.ORBInitialPort","10050");
 
-            orb = ORB.init(args, prop);
+            orb = ORB.init(args, null);
 // get reference to rootpoa & activate the POAManager
-            POA rootpoa =
-                    POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+            POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootpoa.the_POAManager().activate();
 // create servant and register it with the ORB
             GameImpl gameImpl = new GameImpl();
@@ -37,8 +36,7 @@ public class GameServer {
             Game href = GameHelper.narrow(ref);
             PlayerService href1 = PlayerServiceHelper.narrow(ref1);
 // get the root naming context
-            org.omg.CORBA.Object objRef =
-                    orb.resolve_initial_references("NameService");
+            org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
 // Use NamingContextExt which is part of the Interoperable
 // Naming Service (INS) specification.
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);

@@ -24,11 +24,11 @@ public class Client {
     public static void main(String[] args) {
         try {
 // Initialize properties, host and port
-            Properties prop = new Properties();
-            prop.put("org.omg.CORBA.ORBInitialHost", "localhost");
-            prop.put("org.omg.CORBA.ORBInitialPort", "1099");
+//            Properties prop = new Properties();
+//            prop.put("org.omg.CORBA.ORBInitialHost", "localhost");
+//            prop.put("org.omg.CORBA.ORBInitialPort", "10050");
 
-            ORB orb = ORB.init(args, prop);
+            ORB orb = ORB.init(args, null);
 // get the root naming context
             org.omg.CORBA.Object objRef =
                     orb.resolve_initial_references("NameService");

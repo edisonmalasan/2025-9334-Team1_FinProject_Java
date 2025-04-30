@@ -14,7 +14,7 @@ import java.util.List;
 // TODO: Implement PlayerDAO methods to interact with the 'players' table using JDBC, including querying by username and mapping results to Player model objects.
 public class PlayerDAO {
 
-    public void create(Player player) throws DataAccessException {
+    public static void create(Player player) throws DataAccessException {
         String query = "INSERT INTO player (username, password, wins, hasPlayed)" + "VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -31,8 +31,8 @@ public class PlayerDAO {
         }
     }
 
-    public Player findByUsername(String username) {
-        Player p = null;
+    public static Player findByUsername(String username) {
+        Player player = new Player();
         String query = "SELECT * FROM player WHERE username = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -41,17 +41,21 @@ public class PlayerDAO {
             prepstmt.setString(1, username);
             ResultSet rs = prepstmt.executeQuery();
             while(rs.next()){
-                p = new Player(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
+                player.playerId = rs.getInt(1);
+                player.username = rs.getString(2);
+                player.password = rs.getString(3);
+                player.wins = rs.getInt(4);
+                player.hasPlayed = rs.getBoolean(5);
             }
             rs.close();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to fetch player");
         }
-        return p;
+        return player;
     }
 
     public Player findById(String id) {
-        Player p = null;
+        Player player = new Player();
         String query = "SELECT * FROM player WHERE pId = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -60,13 +64,17 @@ public class PlayerDAO {
             prepstmt.setInt(1, Integer.parseInt(id));
             ResultSet rs = prepstmt.executeQuery();
             while(rs.next()){
-                p = new Player(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
+                player.playerId = rs.getInt(1);
+                player.username = rs.getString(2);
+                player.password = rs.getString(3);
+                player.wins = rs.getInt(4);
+                player.hasPlayed = rs.getBoolean(5);
             }
             rs.close();
         } catch (SQLException e) {
             throw new DataAccessException("Failed to fetch player");
         }
-        return p;
+        return player;
     }
 
     public Player save(Player player) {
@@ -104,6 +112,8 @@ public class PlayerDAO {
     }
 
     public List<Player> findAll() {
+        String query = "SELECT * FROM player ORDER BY wins DESC";
+
         return Collections.emptyList();
     }
 

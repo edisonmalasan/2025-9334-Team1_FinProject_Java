@@ -23,7 +23,7 @@ module WhatsTheWord {
         };
 
         struct Leaderboard {
-            sequence<Player> player;
+            sequence<Player> players;
         };
 
         struct GameLobby {
