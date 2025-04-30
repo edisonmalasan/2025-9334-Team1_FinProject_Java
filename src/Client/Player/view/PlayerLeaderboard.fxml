@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="base" prefHeight="662.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerLeaderboard">
+<AnchorPane id="base" prefHeight="662.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerLeaderboard">
     <children>
         <ImageView id="base-in" fitHeight="767.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
             <image>

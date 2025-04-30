@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="zulu8.86.0.25-ca-fx-jdk8.0">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/demo/nio/zipfs" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/annotations/DependencyChecker/PluginChecker/src" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/annotations/DependencyChecker/Plugins/src" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/annotations/Validator/src" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/forkjoin/mergesort" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/jmx/jmx-scandir/src" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/jmx/jmx-scandir/test" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/lambda/BulkDataOperations/src" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/lambda/DefaultMethods" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/nio/chatserver" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/nio/file" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/nio/multicast" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/nio/server" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/scripting/scriptpad/src" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64/sample/try-with-resources/src" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/../../../../Program Files/zulu8.86.0.25-ca-fx-jdk8.0.452-win_x64" recursive="false" type="SOURCES" />
+  </library>
+</component>

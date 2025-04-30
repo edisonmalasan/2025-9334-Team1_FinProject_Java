@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="base" prefHeight="662.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerRegister">
+<AnchorPane id="base" prefHeight="662.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerRegister">
     <children>
         <HBox prefHeight="660.0" prefWidth="1024.0">
             <children>
