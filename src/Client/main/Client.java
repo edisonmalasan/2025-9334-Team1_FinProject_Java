@@ -9,13 +9,11 @@ import Client.WhatsTheWord.client.player.PlayerServiceHelper;
 import Client.WhatsTheWord.game_logic.Game;
 import Client.WhatsTheWord.game_logic.GameHelper;
 import Client.WhatsTheWord.referenceClasses.Player;
-import Client.Player.assets.GameController;
+import Client.Player.controller.GameController;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
-
-import java.util.Properties;
 
 public class Client {
     public static Game game;

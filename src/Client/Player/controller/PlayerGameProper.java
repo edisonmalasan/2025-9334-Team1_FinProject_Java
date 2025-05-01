@@ -1,6 +1,5 @@
 package Client.Player.controller;
 
-import Client.Player.assets.GameController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;

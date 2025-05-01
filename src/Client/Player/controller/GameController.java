@@ -1,4 +1,4 @@
-package Client.Player.assets;
+package Client.Player.controller;
 
 import Client.WhatsTheWord.game_logic.Game;
 import Client.WhatsTheWord.referenceClasses.Player;
