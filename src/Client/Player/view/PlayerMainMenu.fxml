@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="base" prefHeight="662.0" prefWidth="1024.0" style="-fx-background-color: #242424;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerMainMenu">
+    <children>
+        <ImageView id="base-in" fitHeight="767.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../../resources/images/!-game-base.png" />
+            </image>
+        </ImageView>
+        <AnchorPane prefHeight="662.0" prefWidth="1024.0">
+            <children>
+                <ImageView fitHeight="171.0" fitWidth="362.0" layoutX="331.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../resources/images/logo.png" />
+                    </image>
+                </ImageView>
+                <Button id="logoutBttn" fx:id="logoutButton" layoutX="429.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="55.0" prefWidth="167.0" style="-fx-background-color: #6A1908; -fx-border-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 12; -fx-border-width: 2;" text="LOGOUT" textFill="WHITE">
+                    <font>
+                        <Font name="Silkscreen" size="24.0" />
+                    </font>
+                </Button>
+            <Button id="leaderboardBttn" fx:id="leaderBoardButton" layoutX="385.0" layoutY="393.0" mnemonicParsing="false" onAction="#handleLeaderboard" prefHeight="55.0" prefWidth="255.0" style="-fx-background-color: #7349F5; -fx-border-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 12; -fx-border-width: 2;" text="LEADERBOARDS" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Button>
+            <Button id="startBttn" fx:id="startGameButton" layoutX="385.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleStartGame" prefHeight="55.0" prefWidth="255.0" style="-fx-background-color: #037A53; -fx-border-color: #FFFFFF; -fx-border-radius: 10; -fx-background-radius: 12; -fx-border-width: 2;" text="START GAME" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Button>
+            </children>
+        </AnchorPane>
+
+    </children>
+</AnchorPane>
