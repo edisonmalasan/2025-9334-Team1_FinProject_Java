@@ -55,7 +55,7 @@ public class ViewManager {
 
     public static void showView(String viewName) {
         Parent view = views.get(viewName);
-        if (view != null) {
+        if (view == null) {
             throw new IllegalArgumentException("View not found: " + viewName);
         }
 
