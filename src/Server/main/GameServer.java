@@ -1,10 +1,13 @@
 package Server.main;
 
+import Client.WhatsTheWord.client.admin.AdminService;
+import Client.WhatsTheWord.client.admin.AdminServiceHelper;
 import Server.WhatsTheWord.client.player.PlayerService;
 import Server.WhatsTheWord.client.player.PlayerServiceHelper;
 import Server.WhatsTheWord.game_logic.Game;
 import Server.WhatsTheWord.game_logic.GameHelper;
 import Server.controller.GameImpl;
+import Server.service.AdminRequestService;
 import org.omg.CosNaming.*;
 
 import org.omg.CORBA.*;
@@ -19,22 +22,26 @@ public class GameServer {
     public static void main(String[] args) {
         try {
             // Initialize properties, host and port
-//            Properties prop = new Properties();
-//            prop.put("org.omg.CORBA.ORBInitialHost","localhost");
-//            prop.put("org.omg.CORBA.ORBInitialPort","10050");
+            Properties props = new Properties();
+            props.put("org.omg.CORBA.ORBInitialHost","localhost");
+            props.put("org.omg.CORBA.ORBInitialPort","10050");
 
-            orb = ORB.init(args, null);
+            orb = ORB.init(new String[]{}, props);
 // get reference to rootpoa & activate the POAManager
             POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootpoa.the_POAManager().activate();
 // create servant and register it with the ORB
             GameImpl gameImpl = new GameImpl();
             PlayerRequestService playerRequestService = new PlayerRequestService();
+            AdminRequestService adminRequestService = new AdminRequestService();
 // get object reference from the servant
-            org.omg.CORBA.Object ref = rootpoa.servant_to_reference(gameImpl);
-            org.omg.CORBA.Object ref1 = rootpoa.servant_to_reference(playerRequestService);
-            Game href = GameHelper.narrow(ref);
-            PlayerService href1 = PlayerServiceHelper.narrow(ref1);
+            org.omg.CORBA.Object gameRef = rootpoa.servant_to_reference(gameImpl);
+            org.omg.CORBA.Object playerServiceRef = rootpoa.servant_to_reference(playerRequestService);
+            org.omg.CORBA.Object adminServiceRef = rootpoa.servant_to_reference(adminRequestService);
+
+            Game gameHref = GameHelper.narrow(gameRef);
+            PlayerService playerServiceHref = PlayerServiceHelper.narrow(playerServiceRef);
+            AdminService adminServiceHref = AdminServiceHelper.narrow(adminServiceRef);
 // get the root naming context
             org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
 // Use NamingContextExt which is part of the Interoperable
@@ -43,11 +50,17 @@ public class GameServer {
 // bind the Object Reference in Naming
             String gameName = "Game";
             String playerServiceName = "PlayerService";
-            NameComponent[] path = ncRef.to_name(gameName);
-            NameComponent[] path1 = ncRef.to_name(playerServiceName);
-            ncRef.rebind(path, href);
-            ncRef.rebind(path1, href1);
+            String adminServiceName = "AdminService";
+
+            NameComponent[] gamePath = ncRef.to_name(gameName);
+            NameComponent[] playerServicePath = ncRef.to_name(playerServiceName);
+            NameComponent[] adminServicePath = ncRef.to_name(adminServiceName);
+
+            ncRef.rebind(gamePath, gameHref);
+            ncRef.rebind(playerServicePath, playerServiceHref);
+            ncRef.rebind(adminServicePath, adminServiceHref);
             System.out.println("GameServer ready and waiting ...");
+
 // wait for invocations from clients
             orb.run();
 
