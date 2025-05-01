@@ -1,5 +1,7 @@
 package Client.main;
 
+import Client.WhatsTheWord.client.admin.AdminService;
+import Client.WhatsTheWord.client.admin.AdminServiceHelper;
 import Client.common.callback.ClientCallbackImpl;
 import Client.WhatsTheWord.client.ClientCallback;
 import Client.WhatsTheWord.client.ClientCallbackHelper;
@@ -15,18 +17,23 @@ import org.omg.CORBA.*;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
+import java.util.Properties;
+
 public class Client {
+    static ORB orb;
     public static Game game;
-    static ClientCallback callback;
+    public static ClientCallback callback;
     static Player player;
+    public static PlayerService playerService;
+    public static AdminService adminService;
     public static void main(String[] args) {
         try {
 // Initialize properties, host and port
-//            Properties prop = new Properties();
-//            prop.put("org.omg.CORBA.ORBInitialHost", "localhost");
-//            prop.put("org.omg.CORBA.ORBInitialPort", "10050");
+            Properties props = new Properties();
+            props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+            props.put("org.omg.CORBA.ORBInitialPort", "10050");
 
-            ORB orb = ORB.init(args, null);
+            orb = ORB.init(args, props);
 // get the root naming context
             org.omg.CORBA.Object objRef =
                     orb.resolve_initial_references("NameService");
@@ -36,10 +43,14 @@ public class Client {
             rootpoa.the_POAManager().activate();
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 // resolve the Object Reference in Naming
+
             String gameName = "Game";
             String playerServiceName = "PlayerService";
+            String adminServiceName = "AdminService";
+
             game = GameHelper.narrow(ncRef.resolve_str(gameName));
-            PlayerService playerService = PlayerServiceHelper.narrow(ncRef.resolve_str(playerServiceName));
+            playerService = PlayerServiceHelper.narrow(ncRef.resolve_str(playerServiceName));
+            adminService = AdminServiceHelper.narrow(ncRef.resolve_str(adminServiceName));
 
             ClientCallbackImpl callbackImpl = new ClientCallbackImpl();
             org.omg.CORBA.Object ref = rootpoa.servant_to_reference(callbackImpl);
