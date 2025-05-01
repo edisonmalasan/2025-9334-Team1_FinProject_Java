@@ -8,7 +8,7 @@ public class PlayerMainViewTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            ViewManager.init(primaryStage);
+            ViewManager.initialize(primaryStage);
             primaryStage.setTitle("What's The Word Game");
             primaryStage.setResizable(false);
         } catch (Exception e){
