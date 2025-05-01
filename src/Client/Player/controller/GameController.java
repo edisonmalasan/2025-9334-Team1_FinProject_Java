@@ -23,18 +23,18 @@ public class GameController implements ClientControllerObserver {
     public static Game game = Client.game;
 
     public void playGame(ValuesList list) {
-        AtomicInteger timer = new AtomicInteger(getIntFromList(list));
-        String mysteryWord = getStringFromList(list);
-        Set<Character> guessedLetters = new HashSet<>();
-        final int[] lives = {5};
-        gameOver = false;
-        Player currentPlayer = new Player(0,"Test","Tester",0,0,-1,false);
+        AtomicInteger timer = new AtomicInteger(getIntFromList(list));      // This line gets the round time sent by the server
+        String mysteryWord = getStringFromList(list);       // This line gets the word to be guessed sent by the server
+        Set<Character> guessedLetters = new HashSet<>();     // For ensuring that repeated letters are not allowed
+        final int[] lives = {5};        // Total guesses/lives of user
+        gameOver = false;           // Checker if game round is finished
+        Player currentPlayer = new Player(0,"Test","Tester",0,0,-1,false);      // Initializes a player, to be connected to other controllers (i.e. PlayerLogin)
 
-        // Start 30-second timer
+        // Thread that starts a 30-second timer
         Thread timerThread = new Thread(() -> {
             for (int i = timer.get(); i != -1; i--){
                 timer.set(i);
-                System.out.println("Time remaining: " + timer);
+                System.out.println("Time remaining: " + timer); // This line displays the current time
                 try {
                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -47,40 +47,41 @@ public class GameController implements ClientControllerObserver {
             }
         });
 
+        // New thread for getting input of user
         Thread inputThread = new Thread(() -> {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-            displayWordProgress(mysteryWord, guessedLetters);
+            displayWordProgress(mysteryWord, guessedLetters);   // Displays initial word progress, will display only underscores
 
             while (!isWordFullyGuessed(mysteryWord, guessedLetters) && lives[0] != 0 && !gameOver) {
                 try {
                     if (reader.ready()) {
                         String input = reader.readLine().trim().toLowerCase();
 
-                        if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
-                            System.out.print("⚠️ Please enter a single letter: ");
+                        if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {      // Validates user input if more than one character is entered
+                            System.out.print("Please enter a single letter: ");     // Error message
                             continue;
                         }
 
-                        char letter = input.charAt(0);
+                        char letter = input.charAt(0);      // Gets user input
 
-                        if (guessedLetters.contains(letter)) {
-                            System.out.println("Letter already guessed! Try another one.");
+                        if (guessedLetters.contains(letter)) {      // Validates user input so that repeated letter input is not allowed
+                            System.out.println("Letter already guessed! Try another one.");        // Error message
                         }
 
                         guessedLetters.add(letter);
 
-                        if (!mysteryWord.contains(String.valueOf(letter))) {
+                        if (!mysteryWord.contains(String.valueOf(letter))) {        // Validates input if it is contained in the mystery word
                             System.out.println("Wrong guess!");
-                            lives[0]--;
-                            System.out.println("Guess/es left: " + lives[0]);
+                            lives[0]--;                 // Deducts from the total available guesses
+                            System.out.println("Guess/es left: " + lives[0]);           // Displays the current guesses/lives of player
                         }
 
-                        displayWordProgress(mysteryWord, guessedLetters);
+                        displayWordProgress(mysteryWord, guessedLetters);       // Displays word progress
 
-                        if (isWordFullyGuessed(mysteryWord, guessedLetters)) {
-                            System.out.println("You have guessed the word: " + mysteryWord);
-                            currentPlayer.time = timer.get();
+                        if (isWordFullyGuessed(mysteryWord, guessedLetters)) {      // Checks if word has been guessed
+                            System.out.println("You have guessed the word: " + mysteryWord);        // Displays message
+                            currentPlayer.time = timer.get();           // Gets the time when the user correctly guessed the word
                         }
                     } else {
                         Thread.sleep(100);
@@ -91,8 +92,8 @@ public class GameController implements ClientControllerObserver {
             }
         });
 
-        timerThread.start();
-        inputThread.start();
+        timerThread.start();        // Starts timer thread
+        inputThread.start();        // Starts thread for user input
 
         try {
             timerThread.join();
@@ -100,7 +101,7 @@ public class GameController implements ClientControllerObserver {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        game.sendTime(currentPlayer);
+        game.sendTime(currentPlayer);       // Sends the time to the server, sends -1 if user failed to guess the letter correctly
     }
 
     @Override
