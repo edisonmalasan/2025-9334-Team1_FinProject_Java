@@ -1,5 +1,8 @@
 package Client.Player.view;
 
+import Client.Player.controller.PlayerLogin;
+import Client.Player.controller.PlayerRegister;
+import Client.main.Client;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -39,12 +42,23 @@ public class ViewManager {
     }
 
     private static URL getFXMLPath(String filename) {
-        return ViewManager.class.getResource("/Client/Player/view/" + filename);
+        return ViewManager.class.getClassLoader().getResource("Client/Player/view/" + filename);
     }
 
     private static void loadView(String viewName, URL path) throws IOException {
         if (path == null) {
             throw new IOException(viewName + " not found");
+        }
+
+        switch (viewName) {
+            case "PlayerLogin" :
+                PlayerLogin playerLogin = new PlayerLogin();
+                Client.callbackImpl.addObserver(playerLogin);
+                break;
+            case "PlayerRegister" :
+                PlayerRegister playerRegister = new PlayerRegister();
+                Client.callbackImpl.addObserver(playerRegister);
+                break;
         }
 
         FXMLLoader loader = new FXMLLoader(path);
