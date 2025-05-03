@@ -1,8 +1,11 @@
 package Client.Player.controller;
 
+import Client.Player.view.ViewManager;
 import Client.WhatsTheWord.client.player.PlayerRequestType;
 import Client.WhatsTheWord.client.player.PlayerService;
 import Client.WhatsTheWord.referenceClasses.Player;
+import Client.WhatsTheWord.referenceClasses.ValuesList;
+import Client.common.ClientControllerObserver;
 import Client.main.Client;
 import Server.DataAccessObject.PlayerDAO;
 import javafx.event.ActionEvent;
@@ -12,7 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class PlayerRegister {
+public class PlayerRegister implements ClientControllerObserver {
 
     @FXML
     private Button backHyperLink;
@@ -28,7 +31,7 @@ public class PlayerRegister {
     private PlayerService playerService = Client.playerService;
     @FXML
     void handleBackLink(ActionEvent event) {
-
+        ViewManager.showView("PlayerLogin");
     }
 
     @FXML
@@ -41,7 +44,7 @@ public class PlayerRegister {
             showAlert("Error", "Both username and password are required!");
         } else {
             Player newPlayer= new Player(0, username, password, 0, 0, 0, false);
-            playerService.request(PlayerRequestType.LOGIN, newPlayer, Client.callback);
+            playerService.request(PlayerRequestType.REGISTER, newPlayer, Client.callback);
             showAlert("Success", "Registration Successful!");
         }
     }
@@ -54,4 +57,8 @@ public class PlayerRegister {
         alert.showAndWait();
     }
 
+    @Override
+    public void update(ValuesList list) {
+
+    }
 }
