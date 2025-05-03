@@ -6,17 +6,25 @@ import Server.WhatsTheWord.client.player.PlayerRequestType;
 import Server.WhatsTheWord.client.player.PlayerServicePOA;
 import Server.WhatsTheWord.referenceClasses.GameLobby;
 import Server.WhatsTheWord.referenceClasses.Player;
+import Server.WhatsTheWord.referenceClasses.ValuesList;
 import Server.controller.GameLobbyHandler;
+import Server.main.GameServer;
 import Server.util.PasswordHashUtility;
+import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class PlayerRequestService extends PlayerServicePOA {
     private PlayerDAO playerDao;
+    private static ORB orb = GameServer.orb;
+    private static ValuesList list = new ValuesList();
+    private static List<String> loggedInUsers = new ArrayList<>();
 
     public PlayerRequestService() {
     }
@@ -42,6 +50,16 @@ public class PlayerRequestService extends PlayerServicePOA {
 
     public void login(Player player, ClientCallback callback) {
         player = PlayerDAO.findByUsername(player.username);
+        if (player.username == null) {
+            list = buildList("UNSUCCESSFUL_LOGIN");
+            callback._notify(list);
+        } else if (loggedInUsers.contains(player.username)) {
+            list = buildList("USER_ALREADY_LOGGED_IN");
+            callback._notify(list);
+        } else {
+            list = buildList("SUCCESSFUL_LOGIN");
+            callback._notify(list);
+        }
     }
 
     public void startGame(Player player, ClientCallback callback) {
@@ -97,6 +115,16 @@ public class PlayerRequestService extends PlayerServicePOA {
         byte[] bytes = new byte[64];
         secureRandom.nextBytes(bytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+    }
+
+    public static ValuesList buildList(Object object) {
+        Any[] anyArray = new Any[1];
+        Any anyString = orb.create_any();
+        if (object instanceof String) {
+            anyString.insert_string((String) object);
+        }
+        anyArray[0] = anyString;
+        return new ValuesList(anyArray);
     }
 
 }
