@@ -23,4 +23,9 @@ public class ClientCallbackImpl extends ClientCallbackPOA {
     public void removeObserver(ClientControllerObserver observer) {
         observers.remove(observer);
     }
+
+    public void removeAllObservers() {
+        List<ClientControllerObserver> observersCopy = observers;
+        observers.removeAll(observersCopy);
+    }
 }
