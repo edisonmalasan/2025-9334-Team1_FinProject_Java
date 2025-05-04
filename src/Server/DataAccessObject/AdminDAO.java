@@ -69,4 +69,20 @@ public class AdminDAO {
         }
     }
 
+    public static void deletePlayer(String username) {
+        // TODO: delete player from db
+    }
+
+
+    public static void findByPlayerName(String username) {
+
+    }
+
+    public static void setLobbyWaitingTime() {
+        // TODO: edit lobby waiting time
+    }
+
+    public static void setRoundTime() {
+        // TODO: edit lobby waiting time
+    }
 }
