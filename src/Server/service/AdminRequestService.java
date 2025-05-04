@@ -9,6 +9,11 @@ import Server.WhatsTheWord.referenceClasses.Admin;
 import Server.WhatsTheWord.referenceClasses.Player;
 import Server.exception.InvalidCredentialsException;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
+import org.omg.CORBA.Any;
+
+import java.util.List;
+
+import static Server.main.GameServer.orb;
 import static Server.service.PlayerRequestService.buildList;
 
 public class AdminRequestService extends AdminServicePOA {
@@ -22,19 +27,19 @@ public class AdminRequestService extends AdminServicePOA {
         if (type.equals(AdminRequestType.ADMIN_LOGIN)) {
 
         } else if (type.equals(AdminRequestType.CREATE_NEW_PLAYER)) {
-
+            handleCreateNewPlayer(admin, callback);
         } else if (type.equals(AdminRequestType.GET_PLAYER_DETAILS)) {
-
+            handleGetPlayerDetails(admin, callback);
         } else if (type.equals(AdminRequestType.UPDATE_PLAYER_DETAILS)) {
-
+            handleUpdatePlayerDetails(admin, callback);
         } else if (type.equals(AdminRequestType.DELETE_PLAYER)) {
-
+            handleDeletePlayer(admin, callback);
         } else if (type.equals(AdminRequestType.SEARCH_PLAYER)) {
-
+            handleSearchPlayer(admin, callback);
         } else if (type.equals(AdminRequestType.SET_LOBBY_WAITING_TIME)) {
-
+            handleSetLobbyWaitingTime(admin, callback);
         } else if (type.equals(AdminRequestType.SET_ROUND_TIME)) {
-
+            handleSetRoundTime(admin, callback);
         }
     }
 
@@ -43,13 +48,77 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleCreateNewPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        Player newPlayer = new Player();
+        Player existingPlayer = playerDao.findByUsername(admin.username);
+        if (existingPlayer != null) {
+            list = buildList("USERNAME_ALREADY_EXISTS");
+            callback._notify(list);
+        } else {
+            Player newPlayer = new Player();
+            newPlayer.username = admin.username;
+            newPlayer.password = admin.password;
+            playerDao.create(newPlayer);
+            list = buildList("PLAYER_CREATED");
+            callback._notify(list);
+        }
+    }
 
-        newPlayer.username = admin.username;
-        newPlayer.password = admin.password;
-        playerDao.save(newPlayer);
-        list = buildList("PLAYER_ALREADY_EXIST");
-        callback._notify(list);
+    private void handleGetPlayerDetails(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+        List<Player> players = playerDao.findAll();
+        Any[] anyArray = new Any[players.size() + 1];
+        anyArray[0] = orb.create_any();
+        anyArray[0].insert_string("PLAYER_DETAILS");
+
+        for (int i = 0; i < players.size(); i++) {
+            anyArray[i+1] = orb.create_any();
+            anyArray[i+1].insert_string(players.get(i).toString());
+        }
+
+        callback._notify(new ValuesList(anyArray));
+    }
+
+    private void handleUpdatePlayerDetails(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+
+    }
+
+    private void handleDeletePlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+
+    }
+
+    private void handleSearchPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+
+    }
+
+    private void handleSetLobbyWaitingTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+
+    }
+
+    private void handleSetRoundTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+
+    }
+
+    public static ValuesList addPlayerToList(ValuesList list, Player player) {
+        Any[] anyArray = new Any[6];
+        Any message = list.values[0];
+        Any playerID = orb.create_any();
+        Any username = orb.create_any();
+        Any password = orb.create_any();
+        Any wins = orb.create_any();
+        Any hasPlayed = orb.create_any();
+
+        playerID.insert_ulong(player.playerId);
+        username.insert_string(player.username);
+        password.insert_string(player.password);
+        wins.insert_ulong(player.wins);
+        hasPlayed.insert_boolean(player.hasPlayed);
+
+        anyArray[0] = message;
+        anyArray[1] = playerID;
+        anyArray[2] = username;
+        anyArray[3] = password;
+        anyArray[4] = wins;
+        anyArray[5] = hasPlayed;
+
+        return new ValuesList(anyArray);
     }
 }
 

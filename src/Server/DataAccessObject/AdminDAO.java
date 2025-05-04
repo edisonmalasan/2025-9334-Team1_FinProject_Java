@@ -68,7 +68,5 @@ public class AdminDAO {
             return false;
         }
     }
-    public static boolean getPasswordHash(String userName, String password) {
-        return false;
-    }
+
 }
