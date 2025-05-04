@@ -8,6 +8,7 @@ import Client.WhatsTheWord.referenceClasses.ValuesList;
 import Client.common.ClientControllerObserver;
 import Client.main.Client;
 import Server.DataAccessObject.PlayerDAO;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -31,6 +32,9 @@ public class PlayerRegister implements ClientControllerObserver {
     private PlayerService playerService = Client.playerService;
     @FXML
     void handleBackLink(ActionEvent event) {
+        Client.callbackImpl.removeAllObservers();
+        PlayerLogin playerLogin = new PlayerLogin();
+        Client.callbackImpl.addObserver(playerLogin);
         ViewManager.showView("PlayerLogin");
     }
 
@@ -45,8 +49,10 @@ public class PlayerRegister implements ClientControllerObserver {
         } else {
             Player newPlayer= new Player(0, username, password, 0, 0, 0, false);
             playerService.request(PlayerRequestType.REGISTER, newPlayer, Client.callback);
-            showAlert("Success", "Registration Successful!");
         }
+
+        usernameTextField.setText("");
+        passwordField.setText("");
     }
 
     // Helper method to show an alert pop-up
@@ -59,6 +65,17 @@ public class PlayerRegister implements ClientControllerObserver {
 
     @Override
     public void update(ValuesList list) {
-
+        displayUpdate(list);
+    }
+    private void displayUpdate(ValuesList list) {
+        String message = getStringFromList(list);
+        if (message.equals("USERNAME_ALREADY_EXISTS")) {
+            Platform.runLater(() -> showAlert("Register Error!","Username already exists!"));
+        } else {
+            Platform.runLater(() -> showAlert("Success", "Registration Successful!"));
+        }
+    }
+    public String getStringFromList(ValuesList list) {
+        return list.values[0].extract_string();
     }
 }
