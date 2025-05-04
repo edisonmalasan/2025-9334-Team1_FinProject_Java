@@ -14,10 +14,7 @@ import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class PlayerRequestService extends PlayerServicePOA {
@@ -45,7 +42,13 @@ public class PlayerRequestService extends PlayerServicePOA {
     }
 
     public void register(Player player, ClientCallback callback) {
-        PlayerDAO.create(player);
+        Player playerInList = PlayerDAO.findByUsername(player.username);
+        if (!Objects.equals(playerInList.username, null)) {
+            list = buildList("USERNAME_ALREADY_EXISTS");
+            callback._notify(list);
+        } else {
+            PlayerDAO.create(player);
+        }
     }
 
     public void login(Player player, ClientCallback callback) {
@@ -57,7 +60,7 @@ public class PlayerRequestService extends PlayerServicePOA {
             list = buildList("USER_ALREADY_LOGGED_IN");
             callback._notify(list);
         } else {
-            list = buildList("SUCCESSFUL_LOGIN");
+            list = addPlayerToList(buildList("SUCCESSFUL_LOGIN"), player);
             callback._notify(list);
         }
     }
@@ -74,7 +77,7 @@ public class PlayerRequestService extends PlayerServicePOA {
             GameLobbyHandler.waitingLobbies.add(newGameLobby);
             gameLobby = newGameLobby;
 
-            gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
+            gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime, callback);
 
         } else {
             joinGame(player);
@@ -125,6 +128,31 @@ public class PlayerRequestService extends PlayerServicePOA {
         }
         anyArray[0] = anyString;
         return new ValuesList(anyArray);
+    }
+
+    public static ValuesList addPlayerToList(ValuesList list, Player player) {
+        Any[] anyArray = new Any[6];
+        Any message = list.values[0];
+        Any playerID = orb.create_any();
+        Any username = orb.create_any();
+        Any password = orb.create_any();
+        Any wins = orb.create_any();
+        Any hasPlayed = orb.create_any();
+
+        playerID.insert_ulong(player.playerId);
+        username.insert_string(player.username);
+        password.insert_string(player.password);
+        wins.insert_ulong(player.wins);
+        hasPlayed.insert_boolean(player.hasPlayed);
+
+        anyArray[0] = message;
+        anyArray[1] = playerID;
+        anyArray[2] = username;
+        anyArray[3] = password;
+        anyArray[4] = wins;
+        anyArray[5] = hasPlayed;
+
+        return  new ValuesList(anyArray);
     }
 
 }
