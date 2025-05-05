@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.BufferedReader;
@@ -25,6 +26,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 //Todo revisions
 public class PlayerGameProper implements ClientControllerObserver {
+    private Stage stage;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     @FXML
     private Label displayGuesses;

@@ -11,12 +11,19 @@ import Server.DataAccessObject.PlayerDAO;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class PlayerRegister implements ClientControllerObserver {
+    private Stage stage;
 
     @FXML
     private Button backHyperLink;
@@ -30,12 +37,27 @@ public class PlayerRegister implements ClientControllerObserver {
     @FXML
     private TextField usernameTextField;
     private PlayerService playerService = Client.playerService;
+
+    public void initialize() {
+        backHyperLink.setOnAction(event -> {
+            try {
+                handleBackLink(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     @FXML
-    void handleBackLink(ActionEvent event) {
+    void handleBackLink(ActionEvent event) throws IOException {
         Client.callbackImpl.removeAllObservers();
-        PlayerLogin playerLogin = new PlayerLogin();
-        Client.callbackImpl.addObserver(playerLogin);
-        ViewManager.showView("PlayerLogin");
+        Client.callbackImpl.addObserver(new PlayerLogin());
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLogin.fxml"));
+        Parent root = loader.load();
+        PlayerLogin loginController = loader.getController();
+        loginController.setStage(stage);
+        stage.setScene(new Scene(root));
     }
 
     @FXML
@@ -78,4 +100,11 @@ public class PlayerRegister implements ClientControllerObserver {
     public String getStringFromList(ValuesList list) {
         return list.values[0].extract_string();
     }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+
+    // /Client/Player/view/
 }

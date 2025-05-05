@@ -11,12 +11,19 @@ import Client.main.Client;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class PlayerLogin implements ClientControllerObserver {
+    private Stage stage;
 
     @FXML
     private Button enterButton;
@@ -35,6 +42,11 @@ public class PlayerLogin implements ClientControllerObserver {
 
     public PlayerLogin() {
     }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     @FXML
     void handleEnter(ActionEvent event) {
         String username = userNameTextField.getText();
@@ -57,12 +69,17 @@ public class PlayerLogin implements ClientControllerObserver {
     }
 
     @FXML
-    void handleRegisterLink(ActionEvent event) {
+    void handleRegisterLink(ActionEvent event) throws IOException {
         Client.callbackImpl.removeAllObservers();
-        PlayerRegister playerRegister = new PlayerRegister();
-        Client.callbackImpl.addObserver(playerRegister);
-        ViewManager.showView("PlayerRegister");
+        Client.callbackImpl.addObserver(new PlayerRegister());
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerRegister.fxml"));
+        Parent root = loader.load();
+        PlayerRegister registerController = loader.getController();
+        registerController.setStage(stage);
+        stage.setScene(new Scene(root));
     }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -97,7 +114,17 @@ public class PlayerLogin implements ClientControllerObserver {
             Platform.runLater(() -> showAlert("Login Error!","User already logged in!"));
         } else {
             getPlayerFromList(list);
-            Platform.runLater(() -> ViewManager.showView("PlayerMainMenu"));
+            Platform.runLater(() -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerMainMenu.fxml"));
+                    Parent root = loader.load();
+                    PlayerMainMenu playerMainMenuController = loader.getController();
+                    playerMainMenuController.setStage(stage);
+                    stage.setScene(new Scene(root));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }
