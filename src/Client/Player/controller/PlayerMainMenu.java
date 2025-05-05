@@ -30,6 +30,23 @@ public class PlayerMainMenu {
     private PlayerService playerService = Client.playerService;
     private ClientCallback callback = Client.callback;
 
+    public void initialize(){
+        logoutButton.setOnAction(this::handleLogout);
+        leaderBoardButton.setOnAction(event1 -> {
+            try {
+                handleLeaderboard(event1);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        startGameButton.setOnAction(event -> {
+            try {
+                handleStartGame(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
     public void setStage(Stage stage) {
         this.stage = stage;
     }

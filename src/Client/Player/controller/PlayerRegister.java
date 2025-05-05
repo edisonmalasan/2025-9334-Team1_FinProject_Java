@@ -46,6 +46,8 @@ public class PlayerRegister implements ClientControllerObserver {
                 throw new RuntimeException(e);
             }
         });
+
+        enterButton.setOnAction(this::handleEnter);
     }
 
     @FXML
