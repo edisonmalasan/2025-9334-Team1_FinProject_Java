@@ -82,22 +82,29 @@ public class Client extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         try {
-            ViewManager.initialize(primaryStage);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLogin.fxml"));
+            Parent root = loader.load();
+            PlayerLogin loginController = loader.getController();
+            callbackImpl.addObserver(loginController);
+            loginController.setStage(primaryStage);
+
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
             primaryStage.setTitle("What's The Word Game");
             primaryStage.setResizable(false);
-        } catch (Exception e){
+            primaryStage.show();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 //    public void start(Stage primaryStage) throws Exception {
-//        PlayerLogin playerLogin = new PlayerLogin();
-//        callbackImpl.addObserver(playerLogin);
-//        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Client/Player/view/PlayerLogin.fxml"));
-//        Scene scene = new Scene(root);
-//        primaryStage.setTitle("Test");
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-//        primaryStage.setResizable(false);
+//        try {
+//            ViewManager.initialize(primaryStage);
+//            primaryStage.setTitle("What's The Word Game");
+//            primaryStage.setResizable(false);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 //    }
 }
