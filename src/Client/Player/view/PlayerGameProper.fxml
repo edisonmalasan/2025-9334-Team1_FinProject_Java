@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerGameProper">
+<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerGameProper">
    <children>
       <ImageView fitHeight="662.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -67,7 +67,7 @@
             </Label>
             <HBox fx:id="lettersHbox" alignment="CENTER" layoutX="106.0" layoutY="149.0" prefHeight="146.0" prefWidth="811.0">
                <children>
-                  <Label id="displayLetter" fx:id="displayLetter" layoutX="367.0" layoutY="16.0" prefHeight="114.0" prefWidth="83.0" style="-fx-alignment: CENTER; -fx-border-color: #FFAB24; -fx-border-width: 0 0 5 0;" text="A" textAlignment="CENTER" textFill="#ffab24">
+                  <Label id="displayLetter" fx:id="displayLetter" layoutX="367.0" layoutY="16.0" prefHeight="146.0" prefWidth="841.0" style="-fx-alignment: CENTER; -fx-border-color: #FFAB24; -fx-border-width: 0 0 5 0;" text="A" textAlignment="CENTER" textFill="#ffab24">
                      <font>
                         <Font name="Silkscreen Bold" size="96.0" />
                      </font>
