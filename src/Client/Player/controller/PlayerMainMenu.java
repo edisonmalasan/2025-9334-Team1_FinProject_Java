@@ -63,6 +63,24 @@ public class PlayerMainMenu {
 
     @FXML
     void handleLogout(ActionEvent event) {
+        try {
+//            // Send logout request to server
+//            if (playerService != null && callback != null) {
+//                playerService.request(PlayerRequestType.LOGOUT, player, callback);
+//            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLogin.fxml"));
+            Parent root = loader.load();
+
+            PlayerLogin loginController = loader.getController();
+            loginController.setStage(stage);
+            this.player = null;
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
