@@ -1,8 +1,10 @@
 package Client.Player.view;
 
 import Client.Player.controller.PlayerLogin;
+import Client.Player.controller.PlayerMatchMaking;
 import Client.Player.controller.PlayerRegister;
 import Client.main.Client;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -50,15 +52,9 @@ public class ViewManager {
             throw new IOException(viewName + " not found");
         }
 
-        switch (viewName) {
-            case "PlayerLogin" :
-                PlayerLogin playerLogin = new PlayerLogin();
-                Client.callbackImpl.addObserver(playerLogin);
-                break;
-            case "PlayerRegister" :
-                PlayerRegister playerRegister = new PlayerRegister();
-                Client.callbackImpl.addObserver(playerRegister);
-                break;
+        if (viewName.equals("PlayerLogin")) {
+            PlayerLogin playerLogin = new PlayerLogin();
+            Client.callbackImpl.addObserver(playerLogin);
         }
 
         FXMLLoader loader = new FXMLLoader(path);
@@ -79,6 +75,10 @@ public class ViewManager {
             primaryStage.getScene().setRoot(view);
         }
         primaryStage.sizeToScene();
+
+        if (viewName.equals("PlayerMatchMaking")) {
+            PlayerMatchMaking.startMatch();
+        }
     }
 
     public static <T> T getController(String viewName) {
