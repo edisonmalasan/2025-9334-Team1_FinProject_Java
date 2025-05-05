@@ -9,6 +9,7 @@ import Client.WhatsTheWord.referenceClasses.ValuesList;
 import Client.common.ClientControllerObserver;
 import Client.main.Client;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,17 +37,47 @@ public class PlayerMatchMaking implements ClientControllerObserver {
 
     @FXML
     private Pane playerDisplay;
+    @FXML
+    private Label playerName;
 
     private Stage stage;
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    @FXML
-    private Label playerName;
+
+//    public void initialize() {
+//        Thread countdownThread = new Thread(() -> {
+//            try {
+//                for (int i = 5; i > 0; i--) {
+//                    int finalI = i;
+//                    Platform.runLater(() -> inQueueTimer.setText(String.valueOf(finalI)));
+//                    Thread.sleep(1000);
+//                }
+//                Platform.runLater(() -> {
+//                    try {
+//                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerGameProper.fxml"));
+//                        Parent root = loader.load();
+//                        PlayerGameProper playerGameProperController = loader.getController();
+//                        Client.callbackImpl.addObserver(playerGameProperController);
+//                        playerGameProperController.setStage(stage);
+//                        stage.setScene(new Scene(root));
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//        countdownThread.setDaemon(true);
+//        countdownThread.start();
+//    }
+
     private static Player player = PlayerLogin.player;
     private static PlayerService playerService = Client.playerService;
     private static ClientCallback callback = Client.callback;
+    private static boolean checker = false;
 
     public static void startMatch() {
         playerService.request(PlayerRequestType.START_GAME, player, callback);
@@ -63,24 +94,34 @@ public class PlayerMatchMaking implements ClientControllerObserver {
     }
 
     private void displayUpdate(ValuesList list) {
-        String time = String.valueOf(getIntFromList(list));
-        System.out.println(time);
-        Platform.runLater(() -> inQueueTimer.setText(time));
-        if (time.equals("0")) {
-            Client.callbackImpl.removeAllObservers();
-            Client.callbackImpl.addObserver(new PlayerGameProper());
-            Platform.runLater(() -> {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerGameProper.fxml"));
-                    Parent root = loader.load();
-                    PlayerGameProper playerGameProperController = loader.getController();
-                    playerGameProperController.setStage(stage);
-                    stage.setScene(new Scene(root));
-                } catch (IOException e) {
-                    e.printStackTrace();
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+                String time = String.valueOf(getIntFromList(list));
+                System.out.println(time);
+                Platform.runLater(() -> inQueueTimer.setText(time));
+                if (time.equals("0")) {
+                    Client.callbackImpl.removeAllObservers();
+                    Platform.runLater(() -> {
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerGameProper.fxml"));
+                            Parent root = loader.load();
+                            PlayerGameProper playerGameProperController = loader.getController();
+                            Client.callbackImpl.addObserver(playerGameProperController);
+                            playerGameProperController.setStage(stage);
+                            stage.setScene(new Scene(root));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 }
-            });
-        }
+                return null;
+            }
+        };
+
+        Thread backgroundThread = new Thread(task);
+        backgroundThread.setDaemon(true);
+        backgroundThread.start();
     }
 
 
