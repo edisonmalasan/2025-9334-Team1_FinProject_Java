@@ -20,10 +20,11 @@ public class GameLobbyHandler {
     public static boolean checker = false;
     public static String word = "";
     private static ORB orb = GameServer.orb;
-    public synchronized static int countdown(GameLobby gameLobby, int time) {
+    public synchronized static int countdown(GameLobby gameLobby, int time, ClientCallback callback) {
         for (int i = time; i != -1; i--){
             gameLobby.waitingTime = i;
             System.out.println("Waiting time: " + i);
+            callback._notify(buildIntList(i));
             try {
                 Thread.sleep(1000); // 1000 milliseconds = 1 second
             } catch (InterruptedException e) {
@@ -69,5 +70,13 @@ public class GameLobbyHandler {
         anyArray[0] = anyString;
         anyArray[1] = anyInt;
         return new ValuesList(anyArray);
+    }
+
+    public static ValuesList buildIntList(Object object) {
+        Any[] intArray = new Any[1];
+        Any anyInt = orb.create_any();
+        anyInt.insert_ulong((int) object);
+        intArray[0] = anyInt;
+        return new ValuesList(intArray);
     }
 }
