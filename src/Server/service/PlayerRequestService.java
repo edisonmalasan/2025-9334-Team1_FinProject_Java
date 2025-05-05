@@ -22,7 +22,8 @@ public class PlayerRequestService extends PlayerServicePOA {
     private static ORB orb = GameServer.orb;
     private static ValuesList list = new ValuesList();
     private static List<String> loggedInUsers = new ArrayList<>();
-
+    public static int waitingTime = 10;
+    public static int gameTime = 30;
     public PlayerRequestService() {
     }
     public PlayerRequestService(PlayerDAO playerDAO) {
@@ -66,13 +67,14 @@ public class PlayerRequestService extends PlayerServicePOA {
     }
 
     public void startGame(Player player, ClientCallback callback) {
+        Thread lobbyThread = new Thread(() -> {
         System.out.println(player.username + " has requested to start a game.");
         GameLobby gameLobby = new GameLobby();
         if (GameLobbyHandler.waitingLobbies.isEmpty()) {
             System.out.println("No waiting lobbies. Creating new lobby.");
             Player[] players = new Player[1];
             players[0] = player;
-            GameLobby newGameLobby = new GameLobby(0, players, 10, 30, "", null);
+            GameLobby newGameLobby = new GameLobby(0, players, waitingTime, gameTime, "", null);
             GameLobbyHandler.gameLobbies.add(newGameLobby);
             GameLobbyHandler.waitingLobbies.add(newGameLobby);
             gameLobby = newGameLobby;
@@ -91,6 +93,8 @@ public class PlayerRequestService extends PlayerServicePOA {
             GameLobbyHandler.startRound(gameLobby, callback);
         }
         System.out.println(gameLobby.winner.username);
+        });
+        lobbyThread.start();
     }
 
     private void joinGame(Player player) {

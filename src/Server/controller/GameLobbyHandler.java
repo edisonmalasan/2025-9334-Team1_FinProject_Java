@@ -24,7 +24,9 @@ public class GameLobbyHandler {
         for (int i = time; i != -1; i--){
             gameLobby.waitingTime = i;
             System.out.println("Waiting time: " + i);
-            callback._notify(buildIntList(i));
+            if (i == 0)
+                callback._notify(buildIntList(i));
+
             try {
                 Thread.sleep(1000); // 1000 milliseconds = 1 second
             } catch (InterruptedException e) {

@@ -273,7 +273,8 @@ public class PlayerGameProper implements ClientControllerObserver {
         Thread inputThread = new Thread(() -> {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-            displayWordProgress(mysteryWord, guessedLetters);   // Displays initial word progress, will display only underscores
+            Platform.runLater(() -> displayLetter.setText(displayWordProgress(mysteryWord, guessedLetters)));   // Displays initial word progress, will display only underscores
+            Platform.runLater(() -> displayGuesses.setText(list.toString()));
 
             while (!isWordFullyGuessed(mysteryWord, guessedLetters) && lives[0] != 0 && !gameOver) {
                 try {
@@ -296,7 +297,7 @@ public class PlayerGameProper implements ClientControllerObserver {
                         if (!mysteryWord.contains(String.valueOf(letter))) {        // Validates input if it is contained in the mystery word
                             System.out.println("Wrong guess!");
                             lives[0]--;                 // Deducts from the total available guesses
-                            System.out.println("Guess/es left: " + lives[0]);           // Displays the current guesses/lives of player
+                            Platform.runLater(() -> displayGuesses.setText(list.toString()));           // Displays the current guesses/lives of player
                         }
 
                         displayWordProgress(mysteryWord, guessedLetters);       // Displays word progress
@@ -338,16 +339,16 @@ public class PlayerGameProper implements ClientControllerObserver {
         return list.values[1].extract_ulong();
     }
 
-    private static void displayWordProgress(String word, Set<Character> guessedLetters) {
+    private static String displayWordProgress(String word, Set<Character> guessedLetters) {
         StringBuilder progress = new StringBuilder();
         for (char c : word.toCharArray()) {
             if (guessedLetters.contains(c)) {
                 progress.append(c);
             } else {
-                progress.append("_");
+                progress.append("_ ");
             }
         }
-        System.out.println("Word: " + progress.toString().trim());
+        return progress.toString().trim();
     }
     private static boolean isWordFullyGuessed(String word, Set<Character> guessedLetters) {
         for (char character : word.toCharArray()) {

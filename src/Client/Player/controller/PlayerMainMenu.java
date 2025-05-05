@@ -2,6 +2,7 @@ package Client.Player.controller;
 
 import Client.Player.view.ViewManager;
 import Client.WhatsTheWord.client.ClientCallback;
+import Client.WhatsTheWord.client.player.PlayerRequestType;
 import Client.WhatsTheWord.client.player.PlayerService;
 import Client.WhatsTheWord.referenceClasses.Player;
 import Client.main.Client;
@@ -50,13 +51,15 @@ public class PlayerMainMenu {
     @FXML
     void handleStartGame(ActionEvent event) throws IOException {
         Client.callbackImpl.removeAllObservers();
-        Client.callbackImpl.addObserver(new PlayerMatchMaking());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerMatchMaking.fxml"));
         Parent root = loader.load();
-        PlayerMatchMaking controller = loader.getController();
-        controller.setStage(stage);
+        PlayerMatchMaking playerMatchMakingController = loader.getController();
+        Client.callbackImpl.addObserver(playerMatchMakingController);
+        playerMatchMakingController.setStage(stage);
         stage.setScene(new Scene(root));
+        playerService.request(PlayerRequestType.START_GAME, player, callback);
+
     }
 
     // /Client/Player/view/

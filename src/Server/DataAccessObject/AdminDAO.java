@@ -3,6 +3,8 @@ package Server.DataAccessObject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import Server.WhatsTheWord.referenceClasses.Player;
 import Server.database.DatabaseConnection;
 
 public class AdminDAO {
@@ -84,5 +86,10 @@ public class AdminDAO {
 
     public static void setRoundTime() {
         // TODO: edit lobby waiting time
+    }
+
+    public static void addPlayer(String username, String password) {
+        Player newPlayer = new Player(0, username, password, 0, 0, 0, false);
+        PlayerDAO.create(newPlayer);
     }
 }
