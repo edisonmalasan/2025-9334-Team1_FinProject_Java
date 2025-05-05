@@ -6,7 +6,9 @@ import Server.WhatsTheWord.client.ClientCallback;
 import Server.WhatsTheWord.client.admin.AdminRequestType;
 import Server.WhatsTheWord.client.admin.AdminServicePOA;
 import Server.WhatsTheWord.referenceClasses.Admin;
+import Server.WhatsTheWord.referenceClasses.GameLobby;
 import Server.WhatsTheWord.referenceClasses.Player;
+import Server.controller.GameLobbyHandler;
 import Server.exception.InvalidCredentialsException;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
 import org.omg.CORBA.Any;
@@ -48,7 +50,7 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleCreateNewPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        Player existingPlayer = playerDao.findByUsername(admin.username);
+        Player existingPlayer = PlayerDAO.findByUsername(admin.username);
         if (existingPlayer != null) {
             list = buildList("USERNAME_ALREADY_EXISTS");
             callback._notify(list);
@@ -89,11 +91,14 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleSetLobbyWaitingTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+        int waitingTime = 0;
+        PlayerRequestService.waitingTime = waitingTime;
 
     }
 
     private void handleSetRoundTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-
+        int roundTime = 0;
+        PlayerRequestService.gameTime = roundTime;
     }
 
     public static ValuesList addPlayerToList(ValuesList list, Player player) {
