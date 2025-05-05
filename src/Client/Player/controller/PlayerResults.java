@@ -41,11 +41,9 @@ public class PlayerResults {
             Stage currentstage = (Stage) backToMainMenuButton.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Client/Player/view/PlayerMainMenu.fxml"));
             Parent root = loader.load();
-
-            Scene scene = new Scene(root);
-            currentstage.setScene(scene);
-            currentstage.setTitle("Main Menu");
-            currentstage.show();
+            PlayerMainMenu mainMenuController = loader.getController();
+            mainMenuController.setStage(currentstage);
+            currentstage.setScene(new Scene(root));
 
         }catch (Exception e){
             e.printStackTrace();
