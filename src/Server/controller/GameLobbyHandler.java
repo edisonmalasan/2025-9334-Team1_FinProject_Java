@@ -5,6 +5,7 @@ import Server.WhatsTheWord.referenceClasses.GameLobby;
 import Server.WhatsTheWord.referenceClasses.Player;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
 import Server.main.GameServer;
+import Server.service.PlayerRequestService;
 import org.omg.CORBA.*;
 import Server.util.WordGenerator;
 
@@ -24,8 +25,7 @@ public class GameLobbyHandler {
         for (int i = time; i != -1; i--){
             gameLobby.waitingTime = i;
             System.out.println("Waiting time: " + i);
-            if (i == 0)
-                callback._notify(buildIntList(i));
+            callback._notify(buildIntList(i));
 
             try {
                 Thread.sleep(1000); // 1000 milliseconds = 1 second
@@ -54,23 +54,29 @@ public class GameLobbyHandler {
 
             System.out.println("Word to be guessed: " + word);
         }
-
+        String winner = "";
+        if (gameLobby.winner != null) {
+            winner = gameLobby.winner.username;
+        }
         // Build list and send to clients via callback
-        ValuesList list = buildList(word);
+        ValuesList list = buildList(word, gameLobby.gameTime, winner);
         callback._notify(list);
     }
 
-    public static ValuesList buildList(Object object) {
-        Any[] anyArray = new Any[2];
-        Any anyString = orb.create_any();
-        Any anyInt = orb.create_any();
-        if (object instanceof String) {
-            anyString.insert_string((String) object);
-        }
-        anyInt.insert_ulong(30);
+    public static ValuesList buildList(String word, int waitingTime, String winner) {
+        Any[] anyArray = new Any[3];
+        Any wordString = orb.create_any();
+        Any timeInt = orb.create_any();
+        Any winnerString = orb.create_any();
 
-        anyArray[0] = anyString;
-        anyArray[1] = anyInt;
+        wordString.insert_string(word);
+        timeInt.insert_ulong(waitingTime);
+        winnerString.insert_string(winner);
+
+        anyArray[0] = wordString;
+        anyArray[1] = timeInt;
+        anyArray[2] = winnerString;
+
         return new ValuesList(anyArray);
     }
 

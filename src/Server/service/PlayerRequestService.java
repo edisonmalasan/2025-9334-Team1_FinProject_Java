@@ -68,31 +68,32 @@ public class PlayerRequestService extends PlayerServicePOA {
 
     public void startGame(Player player, ClientCallback callback) {
         Thread lobbyThread = new Thread(() -> {
-        System.out.println(player.username + " has requested to start a game.");
-        GameLobby gameLobby = new GameLobby();
-        if (GameLobbyHandler.waitingLobbies.isEmpty()) {
-            System.out.println("No waiting lobbies. Creating new lobby.");
-            Player[] players = new Player[1];
-            players[0] = player;
-            GameLobby newGameLobby = new GameLobby(0, players, waitingTime, gameTime, "", null);
-            GameLobbyHandler.gameLobbies.add(newGameLobby);
-            GameLobbyHandler.waitingLobbies.add(newGameLobby);
-            gameLobby = newGameLobby;
+            System.out.println(player.username + " has requested to start a game.");
+            GameLobby gameLobby = new GameLobby();
+            if (GameLobbyHandler.waitingLobbies.isEmpty()) {
+                System.out.println("No waiting lobbies. Creating new lobby.");
+                Player[] players = new Player[1];
+                players[0] = player;
+                GameLobby newGameLobby = new GameLobby(0, players, waitingTime, gameTime, "", null);
+                GameLobbyHandler.gameLobbies.add(newGameLobby);
+                GameLobbyHandler.waitingLobbies.add(newGameLobby);
+                gameLobby = newGameLobby;
 
-            gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime, callback);
+                gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime, callback);
 
-        } else {
-            joinGame(player);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException();
+            } else {
+                joinGame(player);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException();
+                }
             }
-        }
-        while (gameLobby.winner == null) {
-            GameLobbyHandler.startRound(gameLobby, callback);
-        }
-        System.out.println(gameLobby.winner.username);
+            while (gameLobby.winner == null) {
+                GameLobbyHandler.startRound(gameLobby, callback);
+            }
+            System.out.println(gameLobby.winner.username);
+            callback._notify(GameLobbyHandler.buildList("",-1,gameLobby.winner.username));
         });
         lobbyThread.start();
     }
