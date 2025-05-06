@@ -27,10 +27,8 @@ import org.omg.PortableServer.POAHelper;
 
 import java.util.Properties;
 
-import static javafx.application.Application.launch;
-
 public class Client extends Application {
-    static ORB orb;
+    public static ORB orb;
     public static Game game;
     public static ClientCallback callback;
     public static ClientCallbackImpl callbackImpl = new ClientCallbackImpl();
@@ -67,10 +65,6 @@ public class Client extends Application {
             callback = ClientCallbackHelper.narrow(ref);
 
             player = new Player(0,"Test","Tester",0,0,-1,false);
-
-            //GameController gameController = new GameController();
-            //callbackImpl.addObserver(gameController);
-            //playerService.request(PlayerRequestType.START_GAME,player,callback);
 
             launch(args);
 
