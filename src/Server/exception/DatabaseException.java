@@ -1,4 +1,4 @@
-package Server.database;
+package Server.exception;
 
 public class DatabaseException extends RuntimeException {
     public DatabaseException(String message) {
