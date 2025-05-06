@@ -34,7 +34,7 @@ public class AdminRequestService extends AdminServicePOA {
     @Override
     public void request(AdminRequestType type, Admin admin, ClientCallback callback) {
         if (type.equals(AdminRequestType.ADMIN_LOGIN)) {
-
+            handleAdminLogin(admin, callback);
         } else if (type.equals(AdminRequestType.CREATE_NEW_PLAYER)) {
             handleCreateNewPlayer(admin, callback);
         } else if (type.equals(AdminRequestType.GET_PLAYER_DETAILS)) {
@@ -116,7 +116,6 @@ public class AdminRequestService extends AdminServicePOA {
     private void handleSetLobbyWaitingTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
         int waitingTime = 0;
         PlayerRequestService.waitingTime = waitingTime;
-
     }
 
     private void handleSetRoundTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
