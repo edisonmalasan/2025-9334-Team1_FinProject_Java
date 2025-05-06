@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerGameProper">
+<AnchorPane prefHeight="662.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Player.controller.PlayerGameProper">
    <children>
       <ImageView fitHeight="662.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@/images/!-game-base.png" />
+            <Image url="@../../../../resources/images/!-game-base.png" />
          </image>
       </ImageView>
 
       <Pane layoutY="230.0" prefHeight="432.0" prefWidth="452.0" />
-      <Button id="forfeitBttn" fx:id="forfeitButton" layoutX="453.0" layoutY="570.0" mnemonicParsing="false" onAction="#handleForfeit" prefHeight="43.0" prefWidth="150.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="FORFEIT" textFill="WHITE">
-         <font>
-            <Font name="Silkscreen" size="24.0" />
-         </font>
-      </Button>
       <Pane layoutY="16.0" prefHeight="100.0" prefWidth="1024.0">
          <children>
             <ImageView fitHeight="66.0" fitWidth="244.0" layoutX="-4.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/images/user-subcard.png" />
+                  <Image url="@../../../../resources/images/user-subcard.png" />
                </image>
             </ImageView>
             <Label id="displayRound" fx:id="displayRound" layoutX="321.0" layoutY="23.0" prefHeight="58.0" prefWidth="383.0" style="-fx-alignment: CENTER;" text="Round" textAlignment="CENTER" textFill="WHITE">
@@ -38,16 +38,21 @@
             </Label>
             <ImageView id="displayPfp" fx:id="displayPfp" fitHeight="41.0" fitWidth="42.0" layoutX="7.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/images/profile-alien.png" />
+                  <Image url="@../../../../resources/images/profile-alien.png" />
                </image>
             </ImageView>
+            <Button id="forfeitBttn" fx:id="forfeitButton" layoutX="862.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleForfeit" prefHeight="35.0" prefWidth="123.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="FORFEIT" textFill="WHITE">
+               <font>
+                  <Font name="Silkscreen" size="24.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
       <Pane layoutY="106.0" prefHeight="444.0" prefWidth="1024.0">
          <children>
             <ImageView fitHeight="442.0" fitWidth="872.0" layoutX="85.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/images/display-card.png" />
+                  <Image url="@../../../../resources/images/display-card.png" />
                </image>
             </ImageView>
             <Label id="displayTime" fx:id="displayTimer" layoutX="437.0" layoutY="37.0" prefHeight="34.0" prefWidth="150.0" style="-fx-alignment: CENTER;" text="0:30" textAlignment="CENTER" textFill="WHITE">
@@ -67,9 +72,9 @@
             </Label>
             <HBox fx:id="lettersHbox" alignment="CENTER" layoutX="106.0" layoutY="149.0" prefHeight="146.0" prefWidth="811.0">
                <children>
-                  <Label id="displayLetter" fx:id="displayLetter" layoutX="367.0" layoutY="16.0" prefHeight="146.0" prefWidth="841.0" style="-fx-alignment: CENTER; -fx-border-color: #FFAB24; -fx-border-width: 0 0 5 0;" text="A" textAlignment="CENTER" textFill="#ffab24">
+                  <Label id="displayLetter" fx:id="displayLetter" layoutX="367.0" layoutY="16.0" prefHeight="147.0" prefWidth="1024.0" style="-fx-alignment: CENTER; -fx-border-color: #FFAB24; -fx-border-width: 0 0 5 0;" text="A" textAlignment="CENTER" textFill="#ffab24">
                      <font>
-                        <Font name="Silkscreen Bold" size="96.0" />
+                        <Font size="56.0" />
                      </font>
                   </Label>
                </children>
@@ -95,5 +100,10 @@
             </Pane>
          </children>
       </Pane>
+      <Label fx:id="gameMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="282.0" layoutY="563.0" prefHeight="55.0" prefWidth="452.0" text="GAME MESSAGE" textFill="#a80e0e">
+         <font>
+            <Font name="Silkscreen" size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

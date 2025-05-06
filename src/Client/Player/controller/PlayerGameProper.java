@@ -65,6 +65,9 @@ public class PlayerGameProper implements ClientControllerObserver {
     @FXML
     private Button sendButton;
 
+    @FXML
+    private Label gameMessage;
+
     private String mysteryWord = "";
     private Set<Character> guessedLetters = new HashSet<>();
     private Player currentPlayer = PlayerLogin.player;
