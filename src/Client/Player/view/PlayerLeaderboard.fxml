@@ -40,9 +40,9 @@
                 </ImageView>
                 <TableView fx:id="leaderBoardTable" layoutX="100.0" layoutY="163.0" prefHeight="385.0" prefWidth="847.0" style="-fx-background-color: transparent; -fx-border-radius: 10;">
                     <columns>
-                        <TableColumn prefWidth="116.0" text="RANK" />
-                        <TableColumn prefWidth="626.0" text="USERNAME" />
-                        <TableColumn prefWidth="116.0" text="POINTS" />
+                        <TableColumn fx:id="rankColumn" prefWidth="116.0" text="RANK" />
+                        <TableColumn fx:id="usernameColumn" prefWidth="626.0" text="USERNAME" />
+                        <TableColumn fx:id="winsColumn" prefWidth="116.0" text="POINTS" />
                     </columns>
                 </TableView>
             </children>
