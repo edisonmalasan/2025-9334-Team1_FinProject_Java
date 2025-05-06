@@ -128,21 +128,6 @@ public class PlayerGameProper implements ClientControllerObserver {
         });
     }
 
-//    private void endRound(boolean won) {
-//        timer.stop();
-//
-//        if (won) {
-//            showAlert("Round Won", "Congratulations! You guessed: " + currentWord,
-//                    Alert.AlertType.INFORMATION);
-//        } else {
-//            showAlert("Round Lost", "The word was: " + currentWord,
-//                    Alert.AlertType.WARNING);
-//        }
-//
-//        currentRound++;
-//        setupNewRound();
-//    }
-
     private void showGameOver() {
         Alert gameOver = new Alert(Alert.AlertType.INFORMATION);
         gameOver.setTitle("Game Over");

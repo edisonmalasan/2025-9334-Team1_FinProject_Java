@@ -56,8 +56,11 @@ public class PlayerMainMenu {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLeaderboard.fxml"));
         Parent root = loader.load();
         PlayerLeaderboard leaderboardController = loader.getController();
+        Client.callbackImpl.removeAllObservers();
+        Client.callbackImpl.addObserver(leaderboardController);
         leaderboardController.setStage(stage);
         stage.setScene(new Scene(root));
+        playerService.request(PlayerRequestType.GET_LEADERBOARD, player, callback);
     }
 
 

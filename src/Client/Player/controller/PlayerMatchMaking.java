@@ -1,8 +1,6 @@
 package Client.Player.controller;
 
-import Client.Player.view.ViewManager;
 import Client.WhatsTheWord.client.ClientCallback;
-import Client.WhatsTheWord.client.player.PlayerRequestType;
 import Client.WhatsTheWord.client.player.PlayerService;
 import Client.WhatsTheWord.referenceClasses.Player;
 import Client.WhatsTheWord.referenceClasses.ValuesList;
@@ -24,7 +22,7 @@ import java.io.IOException;
 public class PlayerMatchMaking implements ClientControllerObserver {
 
     @FXML
-    private Button cancelButton;        // Change to start button
+    private Button cancelButton;
 
     @FXML
     private Pane inQueueDisplay;
@@ -41,46 +39,12 @@ public class PlayerMatchMaking implements ClientControllerObserver {
     private Label playerName;
 
     private Stage stage;
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-//    public void initialize() {
-//        Thread countdownThread = new Thread(() -> {
-//            try {
-//                for (int i = 5; i > 0; i--) {
-//                    int finalI = i;
-//                    Platform.runLater(() -> inQueueTimer.setText(String.valueOf(finalI)));
-//                    Thread.sleep(1000);
-//                }
-//                Platform.runLater(() -> {
-//                    try {
-//                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerGameProper.fxml"));
-//                        Parent root = loader.load();
-//                        PlayerGameProper playerGameProperController = loader.getController();
-//                        Client.callbackImpl.addObserver(playerGameProperController);
-//                        playerGameProperController.setStage(stage);
-//                        stage.setScene(new Scene(root));
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                });
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        countdownThread.setDaemon(true);
-//        countdownThread.start();
-//    }
-
     private static Player player = PlayerLogin.player;
     private static PlayerService playerService = Client.playerService;
     private static ClientCallback callback = Client.callback;
     private static boolean checker = false;
-
-    public static void startMatch() {
-        playerService.request(PlayerRequestType.START_GAME, player, callback);
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
     @Override
     public void update(ValuesList list) {
