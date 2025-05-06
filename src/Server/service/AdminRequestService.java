@@ -12,6 +12,7 @@ import Server.controller.GameLobbyHandler;
 import Server.database.DatabaseConnection;
 import Server.exception.InvalidCredentialsException;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
+import Server.util.PasswordHashUtility;
 import org.omg.CORBA.Any;
 
 import java.sql.Connection;
@@ -53,16 +54,37 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleAdminLogin(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        AdminDAO.findByUserName(admin.username);
+        try {
+            // find admin
+            Admin dbAdmin = AdminDAO.findByUsername(admin.username);
 
-        if (admin.username == null) {
-            list = buildList("UNSUCCESSFUL_LOGIN");
-            callback._notify(list);
-        } else if (loggedInAdmin.contains(admin.username)) {
-            list = buildList("USER_ALREADY_LOGGED_IN");
-            callback._notify(list);
-        } else {
+            // verify admin
+            if (dbAdmin == null) {
+                list = buildList("UNSUCCESSFUL_LOGIN");
+                callback._notify(list);
+                return;
+            }
+
+            if (!PasswordHashUtility.verify(admin.password, dbAdmin.password)) {
+                list = buildList("UNSUCCESSFUL_LOGIN");
+                callback._notify(list);
+                return;
+            }
+
+            // check if already logged in
+            if (loggedInAdmin.contains(admin.username)) {
+                list = buildList("ADMIN_ALREADY_LOGGED_IN");
+                callback._notify(list);
+                return;
+            }
+
+            // success
+            loggedInAdmin.add(admin.username);
             list = buildList("SUCCESSFUL_LOGIN");
+            callback._notify(list);
+
+        } catch (Exception e) {
+            list = buildList("LOGIN_ERROR: " + e.getMessage());
             callback._notify(list);
         }
     }
@@ -93,8 +115,8 @@ public class AdminRequestService extends AdminServicePOA {
         callback._notify(new ValuesList(anyArray));
     }
 
-    private void handleUpdatePlayerDetails(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        // handle editing the username of player
+    private void handleUpdatePlayerDetails(Admin admin, ClientCallback callback) {
+        // TODO: handle palyer username update
     }
 
     private void handleDeletePlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {

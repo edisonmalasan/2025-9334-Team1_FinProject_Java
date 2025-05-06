@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import Server.WhatsTheWord.referenceClasses.Admin;
 import Server.WhatsTheWord.referenceClasses.Player;
 import Server.database.DatabaseConnection;
 import Server.exception.DataAccessException;
@@ -73,11 +74,29 @@ public class AdminDAO {
         }
     }
 
+    public static Admin findByUsername(String username) {
+        String query = "SELECT admin_id, username, password FROM admin WHERE username = ?";
 
-    public static void findByUserName(String username) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
 
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Admin admin = new Admin();
+                admin.adminId = rs.getInt("admin_id");
+                admin.username = rs.getString("username");
+                admin.password = rs.getString("password");
+                return admin;
+            }
+            return null; // if no admin found with this username
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error finding admin by username");
+        }
     }
-
     public static void addPlayer(String username, String password) {
         Player newPlayer = new Player(0, username, password, 0, 0, 0, false);
         PlayerDAO.create(newPlayer);
