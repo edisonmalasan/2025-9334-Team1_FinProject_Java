@@ -4,10 +4,9 @@ import Server.WhatsTheWord.referenceClasses.Player;
 import Server.database.DatabaseConnection;
 import Server.exception.DataAccessException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.xml.transform.Result;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -111,10 +110,29 @@ public class PlayerDAO {
         }
     }
 
-    public List<Player> findAll() {
+    public List<Player> findAllPlayers() {
+        List<Player> players = new ArrayList<>();
+
         String query = "SELECT * FROM player ORDER BY wins DESC";
 
-        return Collections.emptyList();
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(query)) {
+
+            while(rs.next()) {
+                Player player = new Player();
+                player.username = rs.getString( "username");
+                player.password = rs.getString("password");
+                player.wins = rs.getInt("wins");
+                player.noOfRoundWins = rs.getInt("noOfRoundWins");
+                player.time = rs.getInt("time");
+                player.hasPlayed = rs.getBoolean("hasPlayed");
+                players.add(player);
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to delete player");
+        }
+        return players;
     }
 
 }

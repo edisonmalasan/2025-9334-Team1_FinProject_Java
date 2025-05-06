@@ -1,11 +1,13 @@
 package Server.DataAccessObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import Server.WhatsTheWord.referenceClasses.Player;
 import Server.database.DatabaseConnection;
+import Server.exception.DataAccessException;
 
 public class AdminDAO {
     /**
@@ -91,5 +93,30 @@ public class AdminDAO {
     public static void addPlayer(String username, String password) {
         Player newPlayer = new Player(0, username, password, 0, 0, 0, false);
         PlayerDAO.create(newPlayer);
+    }
+
+    public List<Player> findAllPlayers() {
+        List<Player> players = new ArrayList<>();
+
+        String query = "SELECT * FROM player ORDER BY wins DESC";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(query)) {
+
+            while(rs.next()) {
+                Player player = new Player();
+                player.username = rs.getString( "username");
+                player.password = rs.getString("password");
+                player.wins = rs.getInt("wins");
+                player.noOfRoundWins = rs.getInt("noOfRoundWins");
+                player.time = rs.getInt("time");
+                player.hasPlayed = rs.getBoolean("hasPlayed");
+                players.add(player);
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to delete player");
+        }
+        return players;
     }
 }

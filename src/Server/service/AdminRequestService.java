@@ -65,7 +65,7 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleGetPlayerDetails(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        List<Player> players = playerDao.findAll();
+        List<Player> players = playerDao.findAllPlayers();
         Any[] anyArray = new Any[players.size() + 1];
         anyArray[0] = orb.create_any();
         anyArray[0].insert_string("PLAYER_DETAILS");

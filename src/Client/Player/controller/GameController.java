@@ -20,6 +20,7 @@ public class GameController implements ClientControllerObserver {
     private static volatile boolean gameOver = false;
     public GameController() {
     }
+
     public static Game game = Client.game;
 
     public void playGame(ValuesList list) {
