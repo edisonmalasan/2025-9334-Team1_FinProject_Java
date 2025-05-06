@@ -78,8 +78,8 @@ public class PlayerDAO {
         return null;
     }
 
-    public void update(Player player, String username) {
-        String query = "UPDATE contact SET username=?, password=?, wins=?, hasPlayed=? WHERE username=?";
+    public static void update(Player player, String username) {
+        String query = "UPDATE player SET username=?, password=?, wins=?, hasPlayed=? WHERE username=?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -109,7 +109,7 @@ public class PlayerDAO {
         return false;
     }
 
-    public List<Player> findAllPlayers() {
+    public static List<Player> findAllPlayers() {
         List<Player> players = new ArrayList<>();
 
         String query = "SELECT * FROM player ORDER BY wins DESC";
@@ -123,8 +123,8 @@ public class PlayerDAO {
                 player.username = rs.getString( "username");
                 player.password = rs.getString("password");
                 player.wins = rs.getInt("wins");
-                player.noOfRoundWins = rs.getInt("noOfRoundWins");
-                player.time = rs.getInt("time");
+                player.noOfRoundWins = 0;
+                player.time = 0;
                 player.hasPlayed = rs.getBoolean("hasPlayed");
                 players.add(player);
             }

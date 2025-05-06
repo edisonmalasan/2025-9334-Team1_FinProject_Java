@@ -12,6 +12,8 @@ import Server.main.GameServer;
 import Server.util.PasswordHashUtility;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
+import org.omg.CORBA.TCKind;
+import org.omg.CORBA.TypeCode;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -38,7 +40,7 @@ public class PlayerRequestService extends PlayerServicePOA {
         } else if (type.equals(PlayerRequestType.START_GAME)) {
             startGame(player, playerCallback);
         } else if (type.equals(PlayerRequestType.GET_LEADERBOARD)) {
-            getLeaderboard();
+            getLeaderboard(playerCallback);
         }
     }
 
@@ -93,6 +95,12 @@ public class PlayerRequestService extends PlayerServicePOA {
                 GameLobbyHandler.startRound(gameLobby, callback);
             }
             System.out.println(gameLobby.winner.username);
+
+            for (Player playerInLobby : gameLobby.players) {
+                playerInLobby.hasPlayed = true;
+                PlayerDAO.update(playerInLobby, playerInLobby.username);
+            }
+
             callback._notify(GameLobbyHandler.buildList("",-1,gameLobby.winner.username));
         });
         lobbyThread.start();
@@ -114,10 +122,45 @@ public class PlayerRequestService extends PlayerServicePOA {
             break;
         }
     }
-    public void getLeaderboard() {
-
+    public void getLeaderboard(ClientCallback callback) {
+        List<Player> playerList = PlayerDAO.findAllPlayers();
+        list = encodePlayers(playerList);
+        callback._notify(list);
     }
 
+    public static ValuesList encodePlayers(List<Player> players) {
+        Any[] result = new Any[players.size()];
+
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+
+            // Inner Any[]
+            Any[] playerData = new Any[2];
+
+            playerData[0] = orb.create_any();
+            playerData[0].insert_string(player.username);
+
+            playerData[1] = orb.create_any();
+            playerData[1].insert_long(player.wins);
+
+            // Serialize to output stream
+            org.omg.CORBA.portable.OutputStream out = orb.create_output_stream();
+            out.write_long(playerData.length);
+            for (Any a : playerData) {
+                out.write_any(a);
+            }
+
+            // Wrap into outer Any
+            org.omg.CORBA.portable.InputStream in = out.create_input_stream();
+            Any outerAny = orb.create_any();
+            TypeCode sequenceOfAny = orb.create_sequence_tc(0, orb.get_primitive_tc(TCKind.tk_any));
+            outerAny.read_value(in, sequenceOfAny);
+
+            result[i] = outerAny;
+        }
+
+        return new ValuesList(result);
+    }
     public String generateSessionToken() {
         SecureRandom secureRandom = new SecureRandom();
         byte[] bytes = new byte[64];
@@ -157,7 +200,7 @@ public class PlayerRequestService extends PlayerServicePOA {
         anyArray[4] = wins;
         anyArray[5] = hasPlayed;
 
-        return  new ValuesList(anyArray);
+        return new ValuesList(anyArray);
     }
 
 }
