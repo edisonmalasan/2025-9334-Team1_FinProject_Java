@@ -2,12 +2,16 @@ package Client.Player.controller;
 
 import Client.Player.view.ViewManager;
 import Client.WhatsTheWord.client.ClientCallback;
+import Client.WhatsTheWord.client.admin.AdminRequestType;
+import Client.WhatsTheWord.client.admin.AdminService;
 import Client.WhatsTheWord.client.player.PlayerRequestType;
 import Client.WhatsTheWord.client.player.PlayerService;
+import Client.WhatsTheWord.referenceClasses.Admin;
 import Client.WhatsTheWord.referenceClasses.Player;
 import Client.WhatsTheWord.referenceClasses.ValuesList;
 import Client.common.ClientControllerObserver;
 import Client.main.Client;
+import Server.service.AdminRequestService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,8 +41,10 @@ public class PlayerLogin implements ClientControllerObserver {
     @FXML
     private TextField userNameTextField;
     public static Player player = new Player(0,"","",0,0,0,false);
+    public static Admin admin = new Admin(0,"", "");
     private ClientCallback callback = Client.callback;
     private PlayerService playerService = Client.playerService;
+    private AdminService adminService = Client.adminService;
 
     public PlayerLogin() {
     }
@@ -56,6 +62,12 @@ public class PlayerLogin implements ClientControllerObserver {
             showAlert("Error", "Both username and password are required!");
             userNameTextField.setText("");
             passwordField.setText("");
+
+        } else if(userNameTextField.getText() == "Admin") {
+            admin.username = username;
+            admin.password = password;
+
+            adminService.request(AdminRequestType.ADMIN_LOGIN, admin, callback);
         } else {
 
             player.username = username;

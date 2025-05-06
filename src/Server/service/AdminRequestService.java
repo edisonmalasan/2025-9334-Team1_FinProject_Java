@@ -17,6 +17,7 @@ import org.omg.CORBA.Any;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static Server.main.GameServer.orb;
@@ -26,6 +27,8 @@ public class AdminRequestService extends AdminServicePOA {
     // TODO: Implement DAO and other methods (Follow PlayerRequestService format)
     private static AdminDAO adminDao;
     private static PlayerDAO playerDao;
+
+    private static List<String> loggedInAdmin = new ArrayList<>();
     private static ValuesList list = new ValuesList();
 
     @Override
@@ -50,7 +53,18 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleAdminLogin(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+        AdminDAO.findByUserName(admin.username);
 
+        if (admin.username == null) {
+            list = buildList("UNSUCCESSFUL_LOGIN");
+            callback._notify(list);
+        } else if (loggedInAdmin.contains(admin.username)) {
+            list = buildList("USER_ALREADY_LOGGED_IN");
+            callback._notify(list);
+        } else {
+            list = buildList("SUCCESSFUL_LOGIN");
+            callback._notify(list);
+        }
     }
 
     private void handleCreateNewPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {

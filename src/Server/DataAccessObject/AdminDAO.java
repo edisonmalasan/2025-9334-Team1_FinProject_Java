@@ -78,7 +78,7 @@ public class AdminDAO {
     }
 
 
-    public static void findByPlayerName(String username) {
+    public static void findByUserName(String username) {
 
     }
 
