@@ -73,21 +73,9 @@ public class AdminDAO {
         }
     }
 
-    public static void deletePlayer(String username) {
-        // TODO: delete player from db
-    }
-
 
     public static void findByUserName(String username) {
 
-    }
-
-    public static void setLobbyWaitingTime() {
-        // TODO: edit lobby waiting time
-    }
-
-    public static void setRoundTime() {
-        // TODO: edit lobby waiting time
     }
 
     public static void addPlayer(String username, String password) {
@@ -95,18 +83,19 @@ public class AdminDAO {
         PlayerDAO.create(newPlayer);
     }
 
-    public List<Player> findAllPlayers() {
+    public List<Player> searchPlayersByUsername(String username) {
         List<Player> players = new ArrayList<>();
+        String query = "SELECT * FROM player WHERE username LIKE ? ORDER BY username";
 
-        String query = "SELECT * FROM player ORDER BY wins DESC";
+        try(Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, "%" + username + "%");
+            ResultSet rs = preparedStatement.executeQuery();
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet rs = statement.executeQuery(query)) {
-
-            while(rs.next()) {
+            while (rs.next()) {
                 Player player = new Player();
-                player.username = rs.getString( "username");
+                player.playerId = rs.getInt("playerId");
+                player.username = rs.getString("username");
                 player.password = rs.getString("password");
                 player.wins = rs.getInt("wins");
                 player.noOfRoundWins = rs.getInt("noOfRoundWins");
@@ -115,8 +104,9 @@ public class AdminDAO {
                 players.add(player);
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Failed to delete player");
+            throw new RuntimeException(e);
         }
         return players;
     }
+
 }
