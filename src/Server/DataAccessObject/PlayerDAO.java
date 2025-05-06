@@ -4,10 +4,8 @@ import Server.WhatsTheWord.referenceClasses.Player;
 import Server.database.DatabaseConnection;
 import Server.exception.DataAccessException;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 // TODO: Implement PlayerDAO methods to interact with the 'players' table using JDBC, including querying by username and mapping results to Player model objects.
@@ -97,7 +95,7 @@ public class PlayerDAO {
         }
     }
 
-    public void delete(String username) {
+    public boolean delete(String username) {
         String query = "DELETE FROM player WHERE username = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -108,6 +106,7 @@ public class PlayerDAO {
         } catch (SQLException e) {
             throw new DataAccessException("Failed to delete player");
         }
+        return false;
     }
 
     public List<Player> findAllPlayers() {

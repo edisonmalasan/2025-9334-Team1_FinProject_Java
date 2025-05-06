@@ -9,10 +9,14 @@ import Server.WhatsTheWord.referenceClasses.Admin;
 import Server.WhatsTheWord.referenceClasses.GameLobby;
 import Server.WhatsTheWord.referenceClasses.Player;
 import Server.controller.GameLobbyHandler;
+import Server.database.DatabaseConnection;
 import Server.exception.InvalidCredentialsException;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
 import org.omg.CORBA.Any;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import static Server.main.GameServer.orb;
@@ -83,7 +87,12 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleDeletePlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-
+        if (playerDao.delete(String.valueOf(admin.adminId))) {
+            list = buildList("PLAYER_DELETED");
+        } else {
+            list = buildList("PLAYER_NOT_FOUND");
+        }
+        callback._notify(list);
     }
 
     private void handleSearchPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
