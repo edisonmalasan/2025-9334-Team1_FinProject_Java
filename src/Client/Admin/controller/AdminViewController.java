@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -11,10 +12,13 @@ import javafx.scene.control.TextField;
 public class AdminViewController {
 
     @FXML
-    private Button addButton;
+    private PasswordField addPasswordField;
 
     @FXML
-    private Button addButton111;
+    private Button addPlayerButton;
+
+    @FXML
+    private TextField addUsernameTextField;
 
     @FXML
     private Label adminNameLabel;
@@ -27,6 +31,9 @@ public class AdminViewController {
 
     @FXML
     private TableView<?> playersTable;
+
+    @FXML
+    private Button refreshButton;
 
     @FXML
     private Button saveButton;
@@ -44,10 +51,16 @@ public class AdminViewController {
     private TableColumn<?, ?> userNameColumn;
 
     @FXML
+    private TextField usernameTextField;
+
+    @FXML
     private TextField waitingTimeTextField;
 
     @FXML
     private TableColumn<?, ?> winsColumn;
+
+    @FXML
+    private TableColumn<?, ?> winsColumn1;
 
     @FXML
     void handleAddPlayer(ActionEvent event) {
