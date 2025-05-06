@@ -12,14 +12,14 @@
    <children>
       <ImageView fitHeight="662.0" fitWidth="1024.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../resources/images/!-game-base.png" />
+            <Image url="@/images/!-game-base.png" />
          </image>
       </ImageView>
       <Pane id="winnerPane" fx:id="resultDisplay" layoutX="-1.0" layoutY="40.0" prefHeight="507.0" prefWidth="1024.0">
          <children>
             <ImageView fitHeight="507.0" fitWidth="584.0" layoutX="220.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../resources/images/match-found-card.png" />
+                  <Image url="@/images/match-found-card.png" />
                </image>
             </ImageView>
             <Label fx:id="gameResult" layoutX="224.0" layoutY="110.0" prefHeight="41.0" prefWidth="576.0" style="-fx-alignment: CENTER;" text="Winner!" textAlignment="CENTER" textFill="WHITE">
@@ -34,7 +34,7 @@
             </Label>
             <ImageView id="displayPfp" fitHeight="126.0" fitWidth="139.0" layoutX="451.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../resources/images/profile-alien.png" />
+                  <Image url="@/images/profile-alien.png" />
                </image>
             </ImageView>
             <Label id="displayePts" fx:id="playerPoints" alignment="CENTER" layoutX="225.0" layoutY="373.0" prefHeight="25.0" prefWidth="576.0" text="123 Points" textAlignment="CENTER" textFill="WHITE">
