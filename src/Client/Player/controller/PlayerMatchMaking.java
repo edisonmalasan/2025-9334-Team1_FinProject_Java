@@ -48,10 +48,11 @@ public class PlayerMatchMaking implements ClientControllerObserver {
     }
     @Override
     public void update(ValuesList list) {
-       Thread updateThread = new Thread(() -> {
-            displayUpdate(list);
-       });
-       updateThread.start();
+        Platform.runLater(() -> playerName.setText(player.username));
+        Thread updateThread = new Thread(() -> {
+             displayUpdate(list);
+        });
+        updateThread.start();
     }
     public int getIntFromList(ValuesList list) {
         return list.values[0].extract_ulong();
@@ -62,7 +63,6 @@ public class PlayerMatchMaking implements ClientControllerObserver {
             @Override
             protected Void call() {
                 String time = String.valueOf(getIntFromList(list));
-                System.out.println(time);
                 Platform.runLater(() -> inQueueTimer.setText(time));
                 if (time.equals("0")) {
                     Client.callbackImpl.removeAllObservers();

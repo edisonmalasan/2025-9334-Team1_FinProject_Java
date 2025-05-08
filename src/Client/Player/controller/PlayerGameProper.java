@@ -67,7 +67,7 @@ public class PlayerGameProper implements ClientControllerObserver {
 
     @FXML
     private Label gameMessage;
-
+    private int roundCount = 0;
     private String mysteryWord = "";
     private Set<Character> guessedLetters = new HashSet<>();
     private Player currentPlayer = PlayerLogin.player;
@@ -87,34 +87,40 @@ public class PlayerGameProper implements ClientControllerObserver {
 
     @FXML
     private void handleSend(ActionEvent event) {
-        letterField.clear();
+        gameMessage.setText("");
         String input = letterField.getText().trim().toLowerCase();
 
-        if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {      // Validates user input if more than one character is entered
-            System.out.print("Please enter a single letter: ");     // Error message
+        while (input.length() != 1 || !Character.isLetter(input.charAt(0))) {      // Validates user input if more than one character is entered
+            gameMessage.setText("Please enter a single letter: ");     // Error message
         }
 
         char letter = input.charAt(0);
 
         if (guessedLetters.contains(letter)) {      // Validates user input so that repeated letter input is not allowed
-            System.out.println("Letter already guessed! Try another one.");        // Error message
+            gameMessage.setText("Letter already guessed! Try another one.");        // Error message
         }
 
         guessedLetters.add(letter);
 
         if (!mysteryWord.contains(String.valueOf(letter))) {        // Validates input if it is contained in the mystery word
-            System.out.println("Wrong guess!");
+            gameMessage.setText("Wrong guess!");
             lives[0]--;                 // Deducts from the total available guesses
-            Platform.runLater(() -> displayGuesses.setText(String.valueOf(lives[0])));           // Displays the current guesses/lives of player
+            displayGuesses.setText(String.valueOf(lives[0]));           // Displays the current guesses/lives of player
         }
 
-        Platform.runLater(() -> displayLetter.setText(displayWordProgress(mysteryWord, guessedLetters)));       // Displays word progress
+        if (lives[0] == 0) {
+            gameMessage.setText("No more guesses left!");
+            sendButton.setDisable(true);
+        }
+
+        displayLetter.setText(displayWordProgress(mysteryWord, guessedLetters));       // Displays word progress
 
         if (isWordFullyGuessed(mysteryWord, guessedLetters)) {      // Checks if word has been guessed
-            System.out.println("You have guessed the word: " + mysteryWord);        // Displays message
+            gameMessage.setText("You have guessed the word: " + mysteryWord);        // Displays message
             sendButton.setDisable(true);
             currentPlayer.time = timer.get();           // Gets the time when the user correctly guessed the word
         }
+        letterField.setText("");
     }
 
     @FXML
@@ -169,6 +175,10 @@ public class PlayerGameProper implements ClientControllerObserver {
         currentPlayer.time = 10;
         sendButton.setDisable(false);
 
+        Platform.runLater(() -> displayUsername.setText(currentPlayer.username));
+        Platform.runLater(() -> displayRound.setText("Round " + roundCount));
+        roundCount++;
+
         // Thread that starts a 30-second timer
         Thread timerThread = new Thread(() -> {
             for (int i = timer.get(); i != -1; i--){
@@ -181,7 +191,7 @@ public class PlayerGameProper implements ClientControllerObserver {
                 }
             }
             if (!gameOver) {
-                System.out.println("Time's up!");
+                Platform.runLater(() -> gameMessage.setText("Time's up!"));
                 gameOver = true;
             }
         });
@@ -205,6 +215,7 @@ public class PlayerGameProper implements ClientControllerObserver {
     }
     @Override
     public void update(ValuesList list) {
+        Platform.runLater(() -> gameMessage.setText("WHAT'S THE WORD?"));
         playGame(list);
     }
 
