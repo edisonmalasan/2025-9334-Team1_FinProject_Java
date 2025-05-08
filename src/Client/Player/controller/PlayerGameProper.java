@@ -8,6 +8,7 @@ import Client.main.Client;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -90,8 +91,8 @@ public class PlayerGameProper implements ClientControllerObserver {
         gameMessage.setText("");
         String input = letterField.getText().trim().toLowerCase();
 
-        while (input.length() != 1 || !Character.isLetter(input.charAt(0))) {      // Validates user input if more than one character is entered
-            gameMessage.setText("Please enter a single letter: ");     // Error message
+        if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {      // Validates user input if more than one character is entered
+            gameMessage.setText("Please enter a single letter!");     // Error message
         }
 
         char letter = input.charAt(0);
@@ -152,19 +153,7 @@ public class PlayerGameProper implements ClientControllerObserver {
     public void playGame(ValuesList list) {
         winner = getWinnerFromList(list);
         if (!Objects.equals(winner, "")) {
-            Platform.runLater(() -> {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerResults.fxml"));
-                    Parent root = loader.load();
-                    PlayerResults playerResultsController = loader.getController();
-                    Client.callbackImpl.removeAllObservers();
-                    Client.callbackImpl.addObserver(playerResultsController);
-                    playerResultsController.setStage(stage);
-                    stage.setScene(new Scene(root));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            Platform.runLater(this::switchToResults);
         }
 
         timer = new AtomicInteger(getIntFromList(list));      // This line gets the round time sent by the server
@@ -175,26 +164,32 @@ public class PlayerGameProper implements ClientControllerObserver {
         currentPlayer.time = 10;
         sendButton.setDisable(false);
 
-        Platform.runLater(() -> displayUsername.setText(currentPlayer.username));
         Platform.runLater(() -> displayRound.setText("Round " + roundCount));
         roundCount++;
 
         // Thread that starts a 30-second timer
-        Thread timerThread = new Thread(() -> {
-            for (int i = timer.get(); i != -1; i--){
-                timer.set(i);
-                Platform.runLater(() -> displayTimer.setText(timer.toString()));
-                try {
+        Task<Void> timerTask = new Task() {
+            @Override
+            protected Void call() throws Exception {
+                for (int i = timer.get(); i >= 0; i--) {
+                    timer.set(i);
+                    updateMessage(String.valueOf(i));
                     Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                if (!gameOver) {
+                    gameMessage.setText("Time's up!");
+                    gameOver = true;
                 }
             }
-            if (!gameOver) {
-                Platform.runLater(() -> gameMessage.setText("Time's up!"));
-                gameOver = true;
-            }
-        });
+        };
+
+        Platform.runLater(() -> displayTimer.textProperty().bind(timerTask.messageProperty()));
+        Thread timerThread = new Thread(timerTask);
 
         // New thread for getting input of user
         Thread initialThread = new Thread(() -> {
@@ -215,6 +210,7 @@ public class PlayerGameProper implements ClientControllerObserver {
     }
     @Override
     public void update(ValuesList list) {
+        Platform.runLater(() -> displayUsername.setText(currentPlayer.username));
         Platform.runLater(() -> gameMessage.setText("WHAT'S THE WORD?"));
         playGame(list);
     }
@@ -249,5 +245,19 @@ public class PlayerGameProper implements ClientControllerObserver {
             }
         }
         return true;
+    }
+
+    private void switchToResults() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerResults.fxml"));
+            Parent root = loader.load();
+            PlayerResults playerResultsController = loader.getController();
+            Client.callbackImpl.removeAllObservers();
+            Client.callbackImpl.addObserver(playerResultsController);
+            playerResultsController.setStage(stage);
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
