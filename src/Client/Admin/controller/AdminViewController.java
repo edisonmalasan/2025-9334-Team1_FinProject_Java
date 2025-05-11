@@ -75,6 +75,8 @@ public class AdminViewController {
     }
 
     private void refreshTable() {
+        Admin admin = new Admin();
+        adminService.request(AdminRequestType.GET_PLAYER_DETAILS, admin, callback);
     }
 
     @FXML
