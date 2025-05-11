@@ -44,8 +44,8 @@ public class AdminRequestService extends AdminServicePOA {
             handleUpdatePlayerDetails(admin, callback);
         } else if (type.equals(AdminRequestType.DELETE_PLAYER)) {
             handleDeletePlayer(admin, callback);
-//        } else if (type.equals(AdminRequestType.SEARCH_PLAYER)) {
-//            handleSearchPlayer(admin, callback);
+        } else if (type.equals(AdminRequestType.SEARCH_PLAYER)) {
+            handleSearchPlayer(admin, callback);
         } else if (type.equals(AdminRequestType.SET_LOBBY_WAITING_TIME)) {
             handleSetLobbyWaitingTime(admin, callback);
         } else if (type.equals(AdminRequestType.SET_ROUND_TIME)) {
@@ -116,7 +116,31 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleUpdatePlayerDetails(Admin admin, ClientCallback callback) {
-        // TODO: handle palyer username update
+       try {
+           Player existingPlayer = PlayerDAO.findByUsername(admin.username);
+           if (existingPlayer != null) {
+               list = buildList("USERNAME_ALREADY_EXISTS");
+               callback._notify(list);
+               return;
+           }
+
+           boolean updateSuccess = AdminDAO.editPlayerName(
+                   existingPlayer.username,
+                   "username",
+                   admin.username
+           );
+
+           if (updateSuccess) {
+               list = buildList("USERNAME_UPDATED");
+           } else {
+               list = buildList("UPDATE_FAILED");
+           }
+           callback._notify(list);
+
+       } catch (Exception e) {
+           list = buildList("UPDATE_FAILED: " + e.getMessage());
+           callback._notify(list);
+       }
     }
 
     private void handleDeletePlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
@@ -128,34 +152,34 @@ public class AdminRequestService extends AdminServicePOA {
         callback._notify(list);
     }
 
-//    private void handleSearchPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-//        try {
-//            List<Player> players = adminDao.searchPlayersByUsername(admin.username);
-//
-//            if (players.isEmpty()) {
-//                list = buildList("PLAYER_NOT_FOUND");
-//                callback._notify(list);
-//                return;
-//            }
-//
-//            Any[] anyArray = new Any[players.size() + 1];
-//            anyArray[0] = orb.create_any();
-//            anyArray[0].insert_string("PLAYER_SEARCH_RESULT");
-//
-//            for (int i = 0; i < players.size(); i++) {
-//                anyArray[i + 1] = orb.create_any();
-//                anyArray[i + 1].insert_string(
-//                        players.get(i).playerId + ":" +
-//                                players.get(i).username + ":" +
-//                                players.get(i).wins
-//                        );
-//            }
-//            callback._notify(new ValuesList(anyArray));
-//        } catch (Exception e) {
-//            list = buildList("SEARCH_FAILED_FOR" + admin.username + "ERROR: " + e.getMessage());
-//            callback._notify(list);
-//        }
-//    }
+    private void handleSearchPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
+        try {
+            List<Player> players = adminDao.searchPlayersByUsername(admin.username);
+
+            if (players.isEmpty()) {
+                list = buildList("PLAYER_NOT_FOUND");
+                callback._notify(list);
+                return;
+            }
+
+            Any[] anyArray = new Any[players.size() + 1];
+            anyArray[0] = orb.create_any();
+            anyArray[0].insert_string("PLAYER_SEARCH_RESULT");
+
+            for (int i = 0; i < players.size(); i++) {
+                anyArray[i + 1] = orb.create_any();
+                anyArray[i + 1].insert_string(
+                        players.get(i).playerId + ":" +
+                                players.get(i).username + ":" +
+                                players.get(i).wins
+                        );
+            }
+            callback._notify(new ValuesList(anyArray));
+        } catch (Exception e) {
+            list = buildList("SEARCH_FAILED_FOR" + admin.username + "ERROR: " + e.getMessage());
+            callback._notify(list);
+        }
+    }
 
     private void handleSetLobbyWaitingTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
         int waitingTime = 0;
