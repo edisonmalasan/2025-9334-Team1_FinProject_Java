@@ -28,25 +28,28 @@ public class GameImpl extends GamePOA {
 
     @Override
     public void sendTime(Player player) {
-        for (GameLobby gameLobby : gameLobbyList) {
-            for (Player playerInLobby : gameLobby.players) {
-                if (player.username.equals(playerInLobby.username)) {
-                    playerInLobby.time = player.time;
+        Thread playerTimeThread = new Thread(() -> {
+            for (GameLobby gameLobby : gameLobbyList) {
+                for (Player playerInLobby : gameLobby.players) {
+                    if (player.username.equals(playerInLobby.username)) {
+                        playerInLobby.time = player.time;
+                        break;
+                    }
+                }
+                gameLobby.players = setScores(gameLobby);
+                gameLobby.winner = checkForWinner(gameLobby.players);
+
+                if (gameLobby.winner != null) {
+                    for (Player playerInLobby : gameLobby.players) {
+                        playerInLobby.noOfRoundWins = 0;
+                        playerInLobby.time = 0;
+                    }
+                    System.out.println("Winner: " + gameLobby.winner.username);
                     break;
                 }
             }
-            gameLobby.players = setScores(gameLobby);
-            gameLobby.winner = checkForWinner(gameLobby.players);
-
-            if (gameLobby.winner != null) {
-                for (Player playerInLobby : gameLobby.players) {
-                    playerInLobby.noOfRoundWins = 0;
-                    playerInLobby.time = 0;
-                }
-                System.out.println("Winner: " + gameLobby.winner.username);
-                break;
-            }
-        }
+        });
+        playerTimeThread.start();
     }
 
     public Player[] setScores(GameLobby gameLobby) {

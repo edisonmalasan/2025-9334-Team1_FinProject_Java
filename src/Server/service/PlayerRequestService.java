@@ -63,9 +63,11 @@ public class PlayerRequestService extends PlayerServicePOA {
             list = buildList("USER_ALREADY_LOGGED_IN");
             callback._notify(list);
         } else {
+            loggedInUsers.add(player.username);
             list = addPlayerToList(buildList("SUCCESSFUL_LOGIN"), player);
             callback._notify(list);
         }
+
     }
 
     public void startGame(Player player, ClientCallback callback) {
