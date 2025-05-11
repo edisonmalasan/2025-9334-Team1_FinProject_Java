@@ -27,7 +27,7 @@
                         <Image url="@../../../../resources/images/blurred-base.png" />
                     </image>
                 </ImageView>
-                <TableView fx:id="playersTable" layoutX="351.0" layoutY="222.0" onSort="#sortByScore" prefHeight="313.0" prefWidth="666.0" style="-fx-background-color: transparent; -fx-border-radius: 10;">
+                <TableView fx:id="playersTable" layoutX="351.0" layoutY="222.0" prefHeight="313.0" prefWidth="666.0" style="-fx-background-color: transparent; -fx-border-radius: 10;">
                     <columns>
                         <TableColumn fx:id="userNameColumn" minWidth="-1.0" prefWidth="303.0" resizable="false" text="USERNAME" />
                         <TableColumn fx:id="winsColumn" maxWidth="309.0" minWidth="-1.0" prefWidth="160.0" resizable="false" text="WINS" />
