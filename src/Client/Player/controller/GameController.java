@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import Client.main.Client;
+import Client.main.Client1;
 
 public class GameController implements ClientControllerObserver {
     private Player player;
@@ -21,7 +21,7 @@ public class GameController implements ClientControllerObserver {
     public GameController() {
     }
 
-    public static Game game = Client.game;
+    public static Game game = Client1.game;
 
     public void playGame(ValuesList list) {
         AtomicInteger timer = new AtomicInteger(getIntFromList(list));      // This line gets the round time sent by the server
@@ -29,7 +29,7 @@ public class GameController implements ClientControllerObserver {
         Set<Character> guessedLetters = new HashSet<>();     // For ensuring that repeated letters are not allowed
         final int[] lives = {5};        // Total guesses/lives of user
         gameOver = false;           // Checker if game round is finished
-        Player currentPlayer = new Player(0,"Test","Tester",0,0,-1,false);      // Initializes a player, to be connected to other controllers (i.e. PlayerLogin)
+        Player currentPlayer = new Player(0,"Test1","Tester",0,0,-1,false);      // Initializes a player, to be connected to other controllers (i.e. PlayerLogin)
 
         // Thread that starts a 30-second timer
         Thread timerThread = new Thread(() -> {

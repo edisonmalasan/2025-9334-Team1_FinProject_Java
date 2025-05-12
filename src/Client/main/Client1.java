@@ -18,7 +18,7 @@ import org.omg.PortableServer.POAHelper;
 import java.util.Properties;
 
 public class Client1 {
-    static Game game;
+    public static Game game;
     static PlayerService playerService;
     static ClientCallback callback;
     static Player player;
