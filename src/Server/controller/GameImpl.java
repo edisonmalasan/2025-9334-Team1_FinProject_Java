@@ -22,11 +22,6 @@ public class GameImpl extends GamePOA {
     }
 
     @Override
-    public void endLobby() {
-
-    }
-
-    @Override
     public void sendTime(Player player) {
         Thread playerTimeThread = new Thread(() -> {
             for (GameLobby gameLobby : gameLobbyList) {

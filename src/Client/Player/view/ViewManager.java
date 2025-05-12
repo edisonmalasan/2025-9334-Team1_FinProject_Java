@@ -75,10 +75,6 @@ public class ViewManager {
             primaryStage.getScene().setRoot(view);
         }
         primaryStage.sizeToScene();
-
-//        if (viewName.equals("PlayerMatchMaking")) {
-//            PlayerMatchMaking.startMatch();
-//        }
     }
 
     public static <T> T getController(String viewName) {

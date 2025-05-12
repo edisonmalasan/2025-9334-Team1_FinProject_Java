@@ -10,6 +10,8 @@ module WhatsTheWord {
             long adminId;
             string username;
             string password;
+            long waitingTime;
+            long gameTime;
         };
 
         struct Player {
@@ -40,7 +42,6 @@ module WhatsTheWord {
 
         interface Game {
             void sendLetter(in char letter);
-            void endLobby();
             void sendTime(in referenceClasses::Player player);
         };
     };
@@ -75,7 +76,8 @@ module WhatsTheWord {
                 REGISTER,
                 LOGIN,
                 START_GAME,
-                GET_LEADERBOARD
+                GET_LEADERBOARD,
+                LOGOUT
             };
 
             interface PlayerService {
