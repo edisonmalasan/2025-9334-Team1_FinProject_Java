@@ -41,6 +41,8 @@ public class PlayerRequestService extends PlayerServicePOA {
             startGame(player, playerCallback);
         } else if (type.equals(PlayerRequestType.GET_LEADERBOARD)) {
             getLeaderboard(playerCallback);
+        } else if (type.equals(PlayerRequestType.LOGOUT)) {
+            logout(player);
         }
     }
 
@@ -203,6 +205,10 @@ public class PlayerRequestService extends PlayerServicePOA {
         anyArray[5] = hasPlayed;
 
         return new ValuesList(anyArray);
+    }
+
+    private void logout(Player player) {
+        loggedInUsers.remove(player.username);
     }
 
 }

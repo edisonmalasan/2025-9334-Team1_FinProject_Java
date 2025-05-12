@@ -67,10 +67,8 @@ public class PlayerMainMenu {
     @FXML
     void handleLogout(ActionEvent event) {
         try {
-//            // Send logout request to server
-//            if (playerService != null && callback != null) {
-//                playerService.request(PlayerRequestType.LOGOUT, player, callback);
-//            }
+            // Send logout request to server
+            playerService.request(PlayerRequestType.LOGOUT, player, callback);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLogin.fxml"));
             Parent root = loader.load();
