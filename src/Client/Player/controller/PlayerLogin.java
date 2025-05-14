@@ -1,5 +1,6 @@
 package Client.Player.controller;
 
+import Client.Admin.controller.AdminViewController;
 import Client.Player.view.ViewManager;
 import Client.WhatsTheWord.client.ClientCallback;
 import Client.WhatsTheWord.client.admin.AdminRequestType;
@@ -25,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class PlayerLogin implements ClientControllerObserver {
     private Stage stage;
@@ -41,10 +43,11 @@ public class PlayerLogin implements ClientControllerObserver {
     @FXML
     private TextField userNameTextField;
     public static Player player = new Player(0,"","",0,0,0,false);
-    public static Admin admin = new Admin(0,"", "");
+    public static Admin admin = new Admin(0,"", "",0,0);
     private ClientCallback callback = Client.callback;
     private PlayerService playerService = Client.playerService;
     private AdminService adminService = Client.adminService;
+    private boolean checker = false;
 
     public PlayerLogin() {
     }
@@ -63,10 +66,10 @@ public class PlayerLogin implements ClientControllerObserver {
             userNameTextField.setText("");
             passwordField.setText("");
 
-        } else if(userNameTextField.getText() == "Admin") {
+        } else if(userNameTextField.getText().contains("Admin")) {
             admin.username = username;
             admin.password = password;
-
+            checker = true;
             adminService.request(AdminRequestType.ADMIN_LOGIN, admin, callback);
         } else {
 
@@ -106,7 +109,7 @@ public class PlayerLogin implements ClientControllerObserver {
         updateThread.start();
     }
 
-    public String getStringFromList(ValuesList list) {
+    public static String getStringFromList(ValuesList list) {
         return list.values[0].extract_string();
     }
 
@@ -125,18 +128,36 @@ public class PlayerLogin implements ClientControllerObserver {
         } else if (message.equals("USER_ALREADY_LOGGED_IN")) {
             Platform.runLater(() -> showAlert("Login Error!","User already logged in!"));
         } else {
-            getPlayerFromList(list);
-            Platform.runLater(() -> {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerMainMenu.fxml"));
-                    Parent root = loader.load();
-                    PlayerMainMenu playerMainMenuController = loader.getController();
-                    playerMainMenuController.setStage(stage);
-                    stage.setScene(new Scene(root));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            if (checker) {
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Admin/view/AdminView.fxml"));
+                        Parent root = loader.load();
+                        AdminViewController adminViewController = loader.getController();
+                        Client.callbackImpl.removeAllObservers();
+                        Client.callbackImpl.addObserver(adminViewController);
+                        adminViewController.setStage(stage);
+                        stage.setScene(new Scene(root));
+                        playerService.request(PlayerRequestType.GET_LEADERBOARD, player, callback);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } else {
+
+                getPlayerFromList(list);
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerMainMenu.fxml"));
+                        Parent root = loader.load();
+                        PlayerMainMenu playerMainMenuController = loader.getController();
+                        playerMainMenuController.setStage(stage);
+                        stage.setScene(new Scene(root));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
         }
     }
 }
