@@ -75,7 +75,7 @@ public class AdminDAO {
     }
 
     public static Admin findByUsername(String username) {
-        String query = "SELECT admin_id, username, password FROM admin WHERE username = ?";
+        String query = "SELECT aId, username, password FROM admin WHERE username = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -85,7 +85,7 @@ public class AdminDAO {
 
             if (rs.next()) {
                 Admin admin = new Admin();
-                admin.adminId = rs.getInt("admin_id");
+                admin.adminId = rs.getInt("aId");
                 admin.username = rs.getString("username");
                 admin.password = rs.getString("password");
                 return admin;
@@ -102,7 +102,7 @@ public class AdminDAO {
         PlayerDAO.create(newPlayer);
     }
 
-    public List<Player> searchPlayersByUsername(String username) {
+    public static List<Player> searchPlayersByUsername(String username) {
         List<Player> players = new ArrayList<>();
         String query = "SELECT * FROM player WHERE username LIKE ? ORDER BY username";
 

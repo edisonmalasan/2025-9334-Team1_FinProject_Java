@@ -95,7 +95,7 @@ public class PlayerDAO {
         }
     }
 
-    public boolean delete(String username) {
+    public static boolean delete(String username) {
         String query = "DELETE FROM player WHERE username = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -103,10 +103,10 @@ public class PlayerDAO {
 
             statement.setString(1, username);
             statement.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            throw new DataAccessException("Failed to delete player");
+            return false;
         }
-        return false;
     }
 
     public static List<Player> findAllPlayers() {
