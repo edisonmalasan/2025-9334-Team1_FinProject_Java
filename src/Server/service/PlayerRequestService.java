@@ -172,7 +172,7 @@ public class PlayerRequestService extends PlayerServicePOA {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
-    public static ValuesList buildList(Object object) {
+    public ValuesList buildList(Object object) {
         Any[] anyArray = new Any[1];
         Any anyString = orb.create_any();
         if (object instanceof String) {

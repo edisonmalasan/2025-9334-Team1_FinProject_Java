@@ -6,29 +6,19 @@ import Server.WhatsTheWord.client.ClientCallback;
 import Server.WhatsTheWord.client.admin.AdminRequestType;
 import Server.WhatsTheWord.client.admin.AdminServicePOA;
 import Server.WhatsTheWord.referenceClasses.Admin;
-import Server.WhatsTheWord.referenceClasses.GameLobby;
 import Server.WhatsTheWord.referenceClasses.Player;
-import Server.controller.GameLobbyHandler;
-import Server.database.DatabaseConnection;
 import Server.exception.InvalidCredentialsException;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
 import Server.util.PasswordHashUtility;
 import org.omg.CORBA.Any;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static Server.main.GameServer.orb;
-import static Server.service.PlayerRequestService.buildList;
+import static Server.service.PlayerRequestService.encodePlayers;
 
 public class AdminRequestService extends AdminServicePOA {
-    // TODO: Implement DAO and other methods (Follow PlayerRequestService format)
-    private static AdminDAO adminDao;
-    private static PlayerDAO playerDao;
-
     private static List<String> loggedInAdmin = new ArrayList<>();
     private static ValuesList list = new ValuesList();
 
@@ -73,7 +63,7 @@ public class AdminRequestService extends AdminServicePOA {
 
             // check if already logged in
             if (loggedInAdmin.contains(admin.username)) {
-                list = buildList("ADMIN_ALREADY_LOGGED_IN");
+                list = buildList("USER_ALREADY_LOGGED_IN");
                 callback._notify(list);
                 return;
             }
@@ -91,60 +81,53 @@ public class AdminRequestService extends AdminServicePOA {
 
     private void handleCreateNewPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
         Player existingPlayer = PlayerDAO.findByUsername(admin.username);
-        if (existingPlayer != null) {
-            list = buildList("USERNAME_ALREADY_EXISTS");
+        if (existingPlayer.username != null) {
+            list = buildList("PLAYER_USERNAME_ALREADY_EXISTS");
             callback._notify(list);
         } else {
-            AdminDAO.addPlayer(admin.username, admin.password);
-            list = buildList("PLAYER_CREATED");
+            Player playerToBeCreated = new Player(000, admin.username, admin.password, 0, 0, 0, false);
+            PlayerDAO.create(playerToBeCreated);
+            list = buildList("PLAYER_CREATED_SUCCESSFULLY");
             callback._notify(list);
         }
     }
 
     private void handleGetPlayerDetails(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        List<Player> players = playerDao.findAllPlayers();
-        Any[] anyArray = new Any[players.size() + 1];
-        anyArray[0] = orb.create_any();
-        anyArray[0].insert_string("PLAYER_DETAILS");
-
-        for (int i = 0; i < players.size(); i++) {
-            anyArray[i+1] = orb.create_any();
-            anyArray[i+1].insert_string(players.get(i).toString());
-        }
-
-        callback._notify(new ValuesList(anyArray));
+        List<Player> playerList = PlayerDAO.findAllPlayers();
+        list = encodePlayers(playerList);
+        callback._notify(list);
     }
 
     private void handleUpdatePlayerDetails(Admin admin, ClientCallback callback) {
        try {
            Player existingPlayer = PlayerDAO.findByUsername(admin.username);
-           if (existingPlayer != null) {
-               list = buildList("USERNAME_ALREADY_EXISTS");
+           if (existingPlayer.username == null) {
+               list = buildList("PLAYER_NOT_FOUND");
                callback._notify(list);
                return;
            }
 
            boolean updateSuccess = AdminDAO.editPlayerName(
-                   existingPlayer.username,
+                   admin.username,
                    "username",
-                   admin.username
+                   admin.password
            );
 
            if (updateSuccess) {
-               list = buildList("USERNAME_UPDATED");
+               list = buildList("PLAYER_USERNAME_ALREADY_SUCCESS");
            } else {
-               list = buildList("UPDATE_FAILED");
+               list = buildList("PLAYER_USERNAME_UPDATE_FAILED");
            }
            callback._notify(list);
 
        } catch (Exception e) {
-           list = buildList("UPDATE_FAILED: " + e.getMessage());
+           list = buildList("PLAYER_USERNAME_UPDATE_FAILED: " + e.getMessage());
            callback._notify(list);
        }
     }
 
     private void handleDeletePlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        if (playerDao.delete(String.valueOf(admin.adminId))) {
+        if (PlayerDAO.delete(admin.username)) {
             list = buildList("PLAYER_DELETED");
         } else {
             list = buildList("PLAYER_NOT_FOUND");
@@ -154,7 +137,7 @@ public class AdminRequestService extends AdminServicePOA {
 
     private void handleSearchPlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
         try {
-            List<Player> players = adminDao.searchPlayersByUsername(admin.username);
+            List<Player> players = AdminDAO.searchPlayersByUsername(admin.username);
 
             if (players.isEmpty()) {
                 list = buildList("PLAYER_NOT_FOUND");
@@ -182,13 +165,27 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleSetLobbyWaitingTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        int waitingTime = 0;
-        PlayerRequestService.waitingTime = waitingTime;
+        PlayerRequestService.waitingTime = admin.waitingTime;
+        list = buildList("WAITING_TIME_UPDATED");
+        System.out.println("waiting time");
+        callback._notify(list);
     }
 
     private void handleSetRoundTime(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
-        int roundTime = 0;
-        PlayerRequestService.gameTime = roundTime;
+        PlayerRequestService.gameTime = admin.gameTime;
+        list = buildList("GAME_TIME_UPDATED");
+        System.out.println("game time");
+        callback._notify(list);
+    }
+
+    public static ValuesList buildList(Object object) {
+        Any[] anyArray = new Any[1];
+        Any anyString = orb.create_any();
+        if (object instanceof String) {
+            anyString.insert_string((String) object);
+        }
+        anyArray[0] = anyString;
+        return new ValuesList(anyArray);
     }
 
 }
