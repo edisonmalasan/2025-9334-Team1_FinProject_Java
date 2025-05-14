@@ -1,11 +1,17 @@
 package Client.Admin.controller;
 
+import Client.Player.controller.PlayerLogin;
 import Client.WhatsTheWord.client.ClientCallback;
 import Client.WhatsTheWord.client.admin.AdminRequestType;
 import Client.WhatsTheWord.client.admin.AdminService;
 import Client.WhatsTheWord.referenceClasses.Admin;
 import Client.WhatsTheWord.referenceClasses.Player;
+import Client.WhatsTheWord.referenceClasses.ValuesList;
+import Client.common.ClientControllerObserver;
 import Client.main.Client;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,9 +19,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import org.omg.CORBA.Any;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static Client.Player.controller.PlayerLogin.getStringFromList;
 
 
-public class AdminViewController {
+public class AdminViewController implements ClientControllerObserver {
 
     @FXML private PasswordField addPasswordField;
     @FXML private Button addPlayerButton;
@@ -32,32 +45,28 @@ public class AdminViewController {
     @FXML private TableColumn<Player, String> userNameColumn;
     @FXML private TextField usernameTextField;
     @FXML private TextField waitingTimeTextField;
-    @FXML private TableColumn<Player, Long> winsColumn;
-    @FXML private TableColumn<Player, Long> winsColumn1;
+    @FXML private TableColumn<Player, Integer> winsColumn;
 
     private ClientCallback callback = Client.callback;
-    private AdminService adminService;
-    private Admin admin;
+    private AdminService adminService = Client.adminService;
+    private Admin admin = PlayerLogin.admin;
     private ObservableList<Player> playersList = FXCollections.observableArrayList();
     private Player selectedPlayer;
+    private Stage stage;
+    private static List<Player> leaderboards = new ArrayList<>();
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     public void initialize(AdminService adminService, Admin admin) {
         this.adminService = adminService;
         this.admin = admin;
         adminNameLabel.setText("Welcome " + admin.username);
-
-        userNameColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().username));
-        winsColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleLongProperty(data.getValue().wins).asObject());
-        winsColumn1.setCellValueFactory(data -> new javafx.beans.property.SimpleLongProperty(data.getValue().noOfRoundWins).asObject());
-
-        playersTable.setItems(playersList);
-
-        playersTable.setOnMouseClicked(this::handleTableClick);
-        searchTextField.setOnKeyReleased(this::handleSearch);
+        playersTable.setOnMouseClicked(event -> {
+            System.out.println("Mouse clicked");
+        });
         initializeButtons();
-
         refreshTable();
-
     }
 
     private void initializeButtons() {
@@ -71,11 +80,11 @@ public class AdminViewController {
 
     @FXML
     void handleRefresh(ActionEvent event) {
-        refreshTable();
+        Platform.runLater(this::refreshTable);
     }
 
     private void refreshTable() {
-        Admin admin = new Admin();
+        Admin admin = PlayerLogin.admin;
         adminService.request(AdminRequestType.GET_PLAYER_DETAILS, admin, callback);
     }
 
@@ -87,8 +96,9 @@ public class AdminViewController {
             showAlert("Error", "Username or Password cannot be empty. Try again.");
             return;
         }
-        Player newPlayer = new Player(0, username, password, 0, 0, 0, false);
-        adminService.request(AdminRequestType.CREATE_NEW_PLAYER, admin, callback);
+
+        Admin playerToBeCreated = new Admin(0, username, password, 0,0);
+        adminService.request(AdminRequestType.CREATE_NEW_PLAYER, playerToBeCreated, callback);
         refreshTable();
         addUsernameTextField.clear();
         addPasswordField.clear();
@@ -101,7 +111,9 @@ public class AdminViewController {
             return;
         }
 
-        adminService.request(AdminRequestType.CREATE_NEW_PLAYER, admin, callback);
+        selectedPlayer.username = usernameTextField.getText();
+        Admin playerToBeDeleted = new Admin(0, selectedPlayer.username, selectedPlayer.password, 0, 0);
+        adminService.request(AdminRequestType.DELETE_PLAYER, playerToBeDeleted, callback);
         refreshTable();
     }
 
@@ -112,9 +124,8 @@ public class AdminViewController {
             return;
         }
 
-        selectedPlayer.username = usernameTextField.getText();
-
-        adminService.request(AdminRequestType.UPDATE_PLAYER_DETAILS, admin, callback);
+        Admin adminTobeSent = new Admin(0, selectedPlayer.username, usernameTextField.getText(), 0, 0);
+        adminService.request(AdminRequestType.UPDATE_PLAYER_DETAILS, adminTobeSent, callback);
         refreshTable();
     }
 
@@ -124,6 +135,8 @@ public class AdminViewController {
             showAlert("Error", "Waiting time cannot be empty. Try again.");
             return;
         }
+
+        admin.waitingTime = Integer.parseInt(waitingTimeTextField.getText());
         adminService.request(AdminRequestType.SET_LOBBY_WAITING_TIME, admin, callback);
     }
 
@@ -133,6 +146,8 @@ public class AdminViewController {
             showAlert("Error", "Game time cannot be empty. Try again.");
             return;
         }
+
+        admin.gameTime = Integer.parseInt(gameTimeTextField.getText());
         adminService.request(AdminRequestType.SET_ROUND_TIME, admin, callback);
     }
 
@@ -147,20 +162,95 @@ public class AdminViewController {
         playersTable.setItems(filteredList);
     }
 
-    private void handleTableClick(MouseEvent event) {
-        selectedPlayer = playersTable.getSelectionModel().getSelectedItem();
-        if (selectedPlayer != null) {
-            usernameTextField.setText(selectedPlayer.username);
-        }
-    }
-
-
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @Override
+    public void update(ValuesList list) {
+        if (checkValue(list.values[0])) {
+            String message = getStringFromList(list);
+            if (message.equals("PLAYER_USERNAME_ALREADY_EXISTS")) {
+                Platform.runLater(() -> showAlert("Error", "Player's username already exists!"));
+            } else if (message.equals("PLAYER_CREATED_SUCCESSFULLY")) {
+                Platform.runLater(() -> showAlert("Success", "New player created!"));
+            } else if (message.contains("PLAYER_USERNAME_UPDATE_SUCCESS")) {
+                Platform.runLater(() -> showAlert("Success", "Player's username updated!"));
+            } else if (message.contains("PLAYER_USERNAME_UPDATE_FAILED")) {
+                Platform.runLater(() -> showAlert("Error", "Player's username cannot be updated!"));
+            } else if (message.equals("PLAYER_DELETED")) {
+                Platform.runLater(() -> showAlert("Success", "Player successfully deleted!"));
+            } else if (message.equals("PLAYER_NOT_FOUND")) {
+                Platform.runLater(() -> showAlert("Error", "Player could not be found!"));
+            } else if (message.equals("WAITING_TIME_UPDATED")) {
+                Platform.runLater(() -> showAlert("Success", "Waiting time successfully updated!"));
+            } else if (message.equals("GAME_TIME_UPDATED")) {
+                Platform.runLater(() -> showAlert("Success", "Game time successfully updated!"));
+            }
+        } else {
+            leaderboards = decodePlayers(list.values);
+
+            Platform.runLater(() -> {
+                userNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().username));
+                winsColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().wins).asObject());
+
+                playersList = FXCollections.observableArrayList(
+                        leaderboards
+                );
+                playersTable.setItems(playersList);
+                searchTextField.setOnKeyReleased(this::handleSearch);
+                playersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                    if (newSelection != null) {
+                        selectedPlayer = newSelection;
+                        usernameTextField.setText(newSelection.username);
+                    }
+                });
+            });
+        }
+    }
+
+    public static List<Player> decodePlayers(Any[] encodedContacts) {
+        List<Player> result = new ArrayList<>();
+
+        for (Any outerAny : encodedContacts) {
+            Any[] contactData = extractInnerAnyArray(outerAny);
+
+            String username = contactData[0].extract_string();
+            int wins = contactData[1].extract_long();
+
+            result.add(new Player(0, username, "", wins, 0, 0, true));
+        }
+
+        return result;
+    }
+
+    public static Any[] extractInnerAnyArray(Any outerAny) {
+        org.omg.CORBA.portable.InputStream in = outerAny.create_input_stream();
+
+        int length = in.read_long();
+        Any[] result = new Any[length];
+
+        for (int i = 0; i < length; i++) {
+            result[i] = in.read_any();
+        }
+
+        return result;
+    }
+
+    public boolean checkValue(Any object) {
+        try {
+            if (object.extract_string() != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
