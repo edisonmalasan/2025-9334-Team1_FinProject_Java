@@ -31,7 +31,6 @@
                     <columns>
                         <TableColumn fx:id="userNameColumn" minWidth="-1.0" prefWidth="303.0" resizable="false" text="USERNAME" />
                         <TableColumn fx:id="winsColumn" maxWidth="309.0" minWidth="-1.0" prefWidth="160.0" resizable="false" text="WINS" />
-                  <TableColumn fx:id="winsColumn1" maxWidth="365.0" minWidth="-1.0" prefWidth="202.0" resizable="false" text="SCORE" />
                     </columns>
                 </TableView>
                 <AnchorPane layoutX="28.0" layoutY="33.0" prefHeight="633.0" prefWidth="297.0" style="-fx-background-color: F3E9D7; -fx-background-radius: 15;">
@@ -88,7 +87,7 @@
             </Button>
             <TextField fx:id="usernameTextField" layoutX="650.0" layoutY="568.0" prefHeight="25.0" prefWidth="150.0" promptText="username" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-radius: 10;" />
             <TextField fx:id="addUsernameTextField" layoutX="871.0" layoutY="569.0" prefHeight="25.0" prefWidth="150.0" promptText="username" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-radius: 10;" />
-            <PasswordField fx:id="addPasswordField" layoutX="872.0" layoutY="603.0" promptText="password" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-radius: 10s;" />
+            <PasswordField fx:id="addPasswordField" layoutX="872.0" layoutY="603.0" promptText="password" style="-fx-background-color: #ffffff; -fx-background-radius: 10; -fx-border-radius: 10;" />
             </children>
         </AnchorPane>
     </children>
