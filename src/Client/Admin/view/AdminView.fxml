@@ -29,8 +29,8 @@
                 </ImageView>
                 <TableView fx:id="playersTable" layoutX="351.0" layoutY="222.0" prefHeight="313.0" prefWidth="666.0" style="-fx-background-color: transparent; -fx-border-radius: 10;">
                     <columns>
-                        <TableColumn fx:id="userNameColumn" minWidth="-1.0" prefWidth="303.0" resizable="false" text="USERNAME" />
-                        <TableColumn fx:id="winsColumn" maxWidth="309.0" minWidth="-1.0" prefWidth="160.0" resizable="false" text="WINS" />
+                        <TableColumn fx:id="userNameColumn" minWidth="-1.0" prefWidth="382.0" resizable="false" text="USERNAME" />
+                        <TableColumn fx:id="winsColumn" maxWidth="362.0" minWidth="-1.0" prefWidth="283.0" resizable="false" text="WINS" />
                     </columns>
                 </TableView>
                 <AnchorPane layoutX="28.0" layoutY="33.0" prefHeight="633.0" prefWidth="297.0" style="-fx-background-color: F3E9D7; -fx-background-radius: 15;">
@@ -46,11 +46,16 @@
                                 <Font size="48.0" />
                             </font>
                         </Label>
+                  <Button fx:id="logoutButton" layoutX="77.0" layoutY="541.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="53.0" prefWidth="142.0" style="-fx-background-color: #6A1908; -fx-border-color: #FFFFFF; -fx-background-radius: 10; -fx-border-radius: 12; -fx-border-width: 2;" text="Logout" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
                     </children>
                 </AnchorPane>
                 <AnchorPane layoutX="353.0" layoutY="33.0" prefHeight="95.0" prefWidth="593.0" style="-fx-background-color: F3E9D7; -fx-background-radius: 10;" AnchorPane.bottomAnchor="574.0" AnchorPane.leftAnchor="353.0" AnchorPane.rightAnchor="131.0" AnchorPane.topAnchor="33.0">
                     <children>
-                        <Label fx:id="adminNameLabel" layoutX="13.0" layoutY="14.0" text="Welcome, (Admin Name) " textFill="#520f07">
+                        <Label fx:id="adminNameLabel" layoutX="13.0" layoutY="14.0" text="Welcome, Admin " textFill="#520f07">
                             <font>
                                 <Font size="48.0" />
                             </font>

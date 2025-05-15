@@ -46,6 +46,7 @@ public class AdminViewController implements ClientControllerObserver {
     @FXML private TextField usernameTextField;
     @FXML private TextField waitingTimeTextField;
     @FXML private TableColumn<Player, Integer> winsColumn;
+    @FXML private Button logoutButton;
 
     private ClientCallback callback = Client.callback;
     private AdminService adminService = Client.adminService;
@@ -213,6 +214,11 @@ public class AdminViewController implements ClientControllerObserver {
         }
     }
 
+    @FXML
+    public void handleLogout() {
+
+    }
+
     public static List<Player> decodePlayers(Any[] encodedContacts) {
         List<Player> result = new ArrayList<>();
 
@@ -252,5 +258,7 @@ public class AdminViewController implements ClientControllerObserver {
             return false;
         }
     }
+
+
 
 }
