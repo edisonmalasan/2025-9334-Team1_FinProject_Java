@@ -1,7 +1,6 @@
 package Client.Admin.controller;
 
 import Client.Player.controller.PlayerLogin;
-import Client.Player.controller.PlayerResults;
 import Client.WhatsTheWord.client.ClientCallback;
 import Client.WhatsTheWord.client.admin.AdminRequestType;
 import Client.WhatsTheWord.client.admin.AdminService;
@@ -22,7 +21,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.omg.CORBA.Any;
 
@@ -157,6 +155,7 @@ public class AdminViewController implements ClientControllerObserver {
         admin.gameTime = Integer.parseInt(gameTimeTextField.getText());
         adminService.request(AdminRequestType.SET_ROUND_TIME, admin, callback);
     }
+
     @FXML
     void handleLogout(ActionEvent event) {
         adminService.request(AdminRequestType.ADMIN_LOGOUT, PlayerLogin.admin, callback);
