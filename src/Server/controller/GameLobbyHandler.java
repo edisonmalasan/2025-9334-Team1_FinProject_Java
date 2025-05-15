@@ -17,24 +17,24 @@ import java.util.Random;
 public class GameLobbyHandler {
     public static List<GameLobby> gameLobbies = new ArrayList<>();
     public static List<GameLobby> waitingLobbies = new ArrayList<>();
+    public static List<ClientCallback> countdownCallbacks = new ArrayList<>();
     public static List<String> previousWords = new ArrayList<>();
     public static boolean checker = false;
     public static String word = "";
     private static ORB orb = GameServer.orb;
-    public synchronized static int countdown(GameLobby gameLobby, int time, ClientCallback callback) {
+    public synchronized static int countdown(GameLobby gameLobby, int time) {
         for (int i = time; i != -1; i--){
             gameLobby.waitingTime = i;
             System.out.println("Waiting time: " + i);
-            callback._notify(buildIntList(i));
+            for (ClientCallback callback : countdownCallbacks) {
+                callback._notify(buildIntList(i));
+            }
 
             try {
                 Thread.sleep(1000); // 1000 milliseconds = 1 second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-        for (Player player : gameLobby.players) {
-            System.out.println(player.username);
         }
         waitingLobbies.remove(gameLobby);
         return 0;
@@ -59,8 +59,17 @@ public class GameLobbyHandler {
             winner = gameLobby.winner.username;
         }
         // Build list and send to clients via callback
-        ValuesList list = buildList(word, gameLobby.gameTime, winner);
+        int gameTime = PlayerRequestService.gameTime;
+        ValuesList list = buildList(word, gameTime, winner);
         callback._notify(list);
+    }
+
+    public static void addToCallbackList(ClientCallback callback) {
+        countdownCallbacks.add(callback);
+    }
+
+    public static void emptyCallbackList() {
+        countdownCallbacks.clear();
     }
 
     public static ValuesList buildList(String word, int waitingTime, String winner) {

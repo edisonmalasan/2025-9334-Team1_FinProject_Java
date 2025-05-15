@@ -1,5 +1,6 @@
 package Server.service;
 
+import Server.DataAccessObject.LobbyDAO;
 import Server.DataAccessObject.PlayerDAO;
 import Server.WhatsTheWord.client.ClientCallback;
 import Server.WhatsTheWord.client.player.PlayerRequestType;
@@ -53,6 +54,8 @@ public class PlayerRequestService extends PlayerServicePOA {
             callback._notify(list);
         } else {
             PlayerDAO.create(player);
+            list = buildList("SUCCESSFUL_LOGIN");
+            callback._notify(list);
         }
     }
 
@@ -76,6 +79,7 @@ public class PlayerRequestService extends PlayerServicePOA {
         Thread lobbyThread = new Thread(() -> {
             System.out.println(player.username + " has requested to start a game.");
             GameLobby gameLobby = new GameLobby();
+            GameLobbyHandler.addToCallbackList(callback);
             if (GameLobbyHandler.waitingLobbies.isEmpty()) {
                 System.out.println("No waiting lobbies. Creating new lobby.");
                 Player[] players = new Player[1];
@@ -84,8 +88,12 @@ public class PlayerRequestService extends PlayerServicePOA {
                 GameLobbyHandler.gameLobbies.add(newGameLobby);
                 GameLobbyHandler.waitingLobbies.add(newGameLobby);
                 gameLobby = newGameLobby;
+                gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
 
-                gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime, callback);
+                if (gameLobby.players.length == 1) {
+                    String message = "*NOT_ENOUGH_PLAYERS*";
+                    callback._notify(GameLobbyHandler.buildList("",-1,message));
+                }
 
             } else {
                 joinGame(player);
@@ -95,17 +103,21 @@ public class PlayerRequestService extends PlayerServicePOA {
                     throw new RuntimeException();
                 }
             }
+
             while (gameLobby.winner == null) {
                 GameLobbyHandler.startRound(gameLobby, callback);
             }
-            System.out.println(gameLobby.winner.username);
 
+            StringBuilder playerNames = new StringBuilder();
             for (Player playerInLobby : gameLobby.players) {
                 playerInLobby.hasPlayed = true;
                 PlayerDAO.update(playerInLobby, playerInLobby.username);
+                playerNames.append(playerInLobby.username).append(", ");
             }
 
-            callback._notify(GameLobbyHandler.buildList("",-1,gameLobby.winner.username));
+            LobbyDAO.create(playerNames.toString(), gameLobby.winner.username);
+            callback._notify(GameLobbyHandler.buildList("", -1, gameLobby.winner.username));
+
         });
         lobbyThread.start();
     }

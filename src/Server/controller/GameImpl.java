@@ -39,7 +39,6 @@ public class GameImpl extends GamePOA {
                         playerInLobby.noOfRoundWins = 0;
                         playerInLobby.time = 0;
                     }
-                    System.out.println("Winner: " + gameLobby.winner.username);
                     break;
                 }
             }
@@ -62,7 +61,6 @@ public class GameImpl extends GamePOA {
             sortedByTime.get(0).noOfRoundWins++;
         }
 
-        System.out.println("setScores checker: " + sortedByTime.get(0).username + ": " + sortedByTime.get(0).time + ": score: " + sortedByTime.get(0).noOfRoundWins);
         sortedByTime = resetTime(sortedByTime);
         return sortedByTime.toArray(new Player[0]);
     }
