@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class WordGenerator {
-    public static String fileName = "D:\\Coding\\CS222_Testing\\resources\\words.txt"; // To be replaced with SQL implementation
+    public static String fileName = "Server/assets/words.txt"; // To be replaced with SQL implementation
     public static String generateWord(int noOfLetters) {
         List<String> matchingWords = new ArrayList<>();
 
