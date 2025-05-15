@@ -80,7 +80,6 @@ public class PlayerRequestService extends PlayerServicePOA {
 
     public void startGame(Player player, ClientCallback callback) {
         Thread lobbyThread = new Thread(() -> {
-            System.out.println(player.username + " has requested to start a game.");
             GameLobby gameLobby = new GameLobby();
             GameLobbyHandler.addToCallbackList(callback);
             if (GameLobbyHandler.waitingLobbies.isEmpty()) {
@@ -92,7 +91,7 @@ public class PlayerRequestService extends PlayerServicePOA {
                 GameLobbyHandler.waitingLobbies.add(newGameLobby);
                 gameLobby = newGameLobby;
                 gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
-
+                GameLobbyHandler.emptyCallbackList();
                 if (gameLobby.players.length == 1) {
                     String message = "*NOT_ENOUGH_PLAYERS*";
                     callback._notify(GameLobbyHandler.buildList("",-1,message));
