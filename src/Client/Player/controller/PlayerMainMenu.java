@@ -72,8 +72,9 @@ public class PlayerMainMenu {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLogin.fxml"));
             Parent root = loader.load();
-
             PlayerLogin loginController = loader.getController();
+            Client.callbackImpl.removeAllObservers();
+            Client.callbackImpl.addObserver(loginController);
             loginController.setStage(stage);
             this.player = null;
 

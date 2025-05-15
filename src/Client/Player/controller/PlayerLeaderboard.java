@@ -80,14 +80,14 @@ public class PlayerLeaderboard implements ClientControllerObserver {
         });
     }
 
-    public static List<Player> decodePlayers(Any[] encodedContacts) {
+    public static List<Player> decodePlayers(Any[] encodedPlayers) {
         List<Player> result = new ArrayList<>();
 
-        for (Any outerAny : encodedContacts) {
-            Any[] contactData = extractInnerAnyArray(outerAny);
+        for (Any outerAny : encodedPlayers) {
+            Any[] playerData = extractInnerAnyArray(outerAny);
 
-            String username = contactData[0].extract_string();
-            int wins = contactData[1].extract_long();
+            String username = playerData[0].extract_string();
+            int wins = playerData[1].extract_long();
 
             result.add(new Player(0, username, "", wins, 0, 0, true));
 

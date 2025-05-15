@@ -68,7 +68,7 @@ public class PlayerGameProper implements ClientControllerObserver {
 
     @FXML
     private Label gameMessage;
-    private int roundCount = 0;
+    public static int roundCount = 0;
     private String mysteryWord = "";
     private Set<Character> guessedLetters = new HashSet<>();
     private Player currentPlayer = PlayerLogin.player;
@@ -123,7 +123,6 @@ public class PlayerGameProper implements ClientControllerObserver {
         }
         letterField.setText("");
     }
-
     @FXML
     private void handleForfeit(ActionEvent event) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
@@ -137,23 +136,11 @@ public class PlayerGameProper implements ClientControllerObserver {
             }
         });
     }
-
-    private void showGameOver() {
-        Alert gameOver = new Alert(Alert.AlertType.INFORMATION);
-        gameOver.setTitle("Game Over");
-        gameOver.setHeaderText("All rounds completed!");
-        gameOver.setContentText("Thank you for playing!");
-        gameOver.showAndWait();
-
-        // Disable game controls
-        sendButton.setDisable(true);
-        forfeitButton.setDisable(true);
-        letterField.setDisable(true);
-    }
     public void playGame(ValuesList list) {
         winner = getWinnerFromList(list);
-        if (!Objects.equals(winner, "")) {
+        if (!Objects.equals(winner, "") || winner.equals("*NOT_ENOUGH_PLAYERS*")) {
             Platform.runLater(this::switchToResults);
+            return;
         }
 
         timer = new AtomicInteger(getIntFromList(list));      // This line gets the round time sent by the server
@@ -161,7 +148,7 @@ public class PlayerGameProper implements ClientControllerObserver {
         gameOver = false;           // Checker if game round is finished
         lives = new int[]{5};
         guessedLetters.clear();
-        currentPlayer.time = 10;
+        currentPlayer.time = -1;
         sendButton.setDisable(false);
 
         Platform.runLater(() -> displayRound.setText("Round " + roundCount));
@@ -253,7 +240,6 @@ public class PlayerGameProper implements ClientControllerObserver {
             Parent root = loader.load();
             PlayerResults playerResultsController = loader.getController();
             Client.callbackImpl.removeAllObservers();
-            Client.callbackImpl.addObserver(playerResultsController);
             playerResultsController.setStage(stage);
             stage.setScene(new Scene(root));
         } catch (IOException e) {

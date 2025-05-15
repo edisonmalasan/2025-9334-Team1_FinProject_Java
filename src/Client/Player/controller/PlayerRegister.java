@@ -52,12 +52,11 @@ public class PlayerRegister implements ClientControllerObserver {
 
     @FXML
     void handleBackLink(ActionEvent event) throws IOException {
-        Client.callbackImpl.removeAllObservers();
-        Client.callbackImpl.addObserver(new PlayerLogin());
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLogin.fxml"));
         Parent root = loader.load();
         PlayerLogin loginController = loader.getController();
+        Client.callbackImpl.removeAllObservers();
+        Client.callbackImpl.addObserver(loginController);
         loginController.setStage(stage);
         stage.setScene(new Scene(root));
     }
