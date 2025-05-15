@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Implement PlayerDAO methods to interact with the 'players' table using JDBC, including querying by username and mapping results to Player model objects.
 public class PlayerDAO {
 
     public static void create(Player player) throws DataAccessException {
@@ -126,7 +125,11 @@ public class PlayerDAO {
                 player.noOfRoundWins = 0;
                 player.time = 0;
                 player.hasPlayed = rs.getBoolean("hasPlayed");
-                players.add(player);
+                if (player.hasPlayed && players.size() != 5) {
+                    players.add(player);
+                } else {
+                    break;
+                }
             }
         } catch (SQLException e) {
             throw new DataAccessException("Failed to delete player");
