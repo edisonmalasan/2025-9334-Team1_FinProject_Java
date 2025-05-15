@@ -1,20 +1,16 @@
 package Client.main;
 
 import Client.Player.controller.PlayerLogin;
-import Client.Player.view.ViewManager;
 import Client.WhatsTheWord.client.admin.AdminService;
 import Client.WhatsTheWord.client.admin.AdminServiceHelper;
-import Client.common.ClientControllerObserver;
 import Client.common.callback.ClientCallbackImpl;
 import Client.WhatsTheWord.client.ClientCallback;
 import Client.WhatsTheWord.client.ClientCallbackHelper;
-import Client.WhatsTheWord.client.player.PlayerRequestType;
 import Client.WhatsTheWord.client.player.PlayerService;
 import Client.WhatsTheWord.client.player.PlayerServiceHelper;
 import Client.WhatsTheWord.game_logic.Game;
 import Client.WhatsTheWord.game_logic.GameHelper;
 import Client.WhatsTheWord.referenceClasses.Player;
-import Client.Player.controller.GameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

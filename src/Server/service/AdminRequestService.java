@@ -9,6 +9,7 @@ import Server.WhatsTheWord.referenceClasses.Admin;
 import Server.WhatsTheWord.referenceClasses.Player;
 import Server.exception.InvalidCredentialsException;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
+import Server.util.LogManager;
 import Server.util.PasswordHashUtility;
 import org.omg.CORBA.Any;
 
@@ -19,28 +20,44 @@ import static Server.main.GameServer.orb;
 import static Server.service.PlayerRequestService.encodePlayers;
 
 public class AdminRequestService extends AdminServicePOA {
+    private LogManager logManager = new LogManager();
     private static List<String> loggedInAdmin = new ArrayList<>();
     private static ValuesList list = new ValuesList();
 
     @Override
     public void request(AdminRequestType type, Admin admin, ClientCallback callback) {
         if (type.equals(AdminRequestType.ADMIN_LOGIN)) {
+            logManager.logMessage(admin.username + " logged in.");
             handleAdminLogin(admin, callback);
+        } else if (type.equals(AdminRequestType.ADMIN_LOGOUT)) {
+            logManager.logMessage(admin.username + " logged out.");
+            handleAdminLogout(admin);
         } else if (type.equals(AdminRequestType.CREATE_NEW_PLAYER)) {
+            logManager.logMessage("Created new player: " + admin.username + ", " + admin.password);
             handleCreateNewPlayer(admin, callback);
         } else if (type.equals(AdminRequestType.GET_PLAYER_DETAILS)) {
+            logManager.logMessage(admin.username + "loaded leaderboards.");
             handleGetPlayerDetails(admin, callback);
         } else if (type.equals(AdminRequestType.UPDATE_PLAYER_DETAILS)) {
+            logManager.logMessage("Updated username for " + admin.username + " to " + admin.password);
             handleUpdatePlayerDetails(admin, callback);
         } else if (type.equals(AdminRequestType.DELETE_PLAYER)) {
+            logManager.logMessage("Deleted player: " + admin.username);
             handleDeletePlayer(admin, callback);
         } else if (type.equals(AdminRequestType.SEARCH_PLAYER)) {
+            logManager.logMessage(admin.username + "searched for player.");
             handleSearchPlayer(admin, callback);
         } else if (type.equals(AdminRequestType.SET_LOBBY_WAITING_TIME)) {
+            logManager.logMessage(admin.username + " set waiting time to : " + admin.waitingTime);
             handleSetLobbyWaitingTime(admin, callback);
         } else if (type.equals(AdminRequestType.SET_ROUND_TIME)) {
+            logManager.logMessage(admin.username + " set game time to: " + admin.gameTime);
             handleSetRoundTime(admin, callback);
         }
+    }
+
+    private void handleAdminLogout(Admin admin) {
+        loggedInAdmin.remove(admin.username);
     }
 
     private void handleAdminLogin(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
@@ -61,6 +78,15 @@ public class AdminRequestService extends AdminServicePOA {
                 return;
             }
 
+            // check if already logged in
+            if (loggedInAdmin.contains(admin.username)) {
+                list = buildList("USER_ALREADY_LOGGED_IN");
+                callback._notify(list);
+                return;
+            }
+
+            // success
+            loggedInAdmin.add(admin.username);
             list = buildList("SUCCESSFUL_LOGIN");
             callback._notify(list);
 
@@ -90,31 +116,31 @@ public class AdminRequestService extends AdminServicePOA {
     }
 
     private void handleUpdatePlayerDetails(Admin admin, ClientCallback callback) {
-       try {
-           Player existingPlayer = PlayerDAO.findByUsername(admin.username);
-           if (existingPlayer.username == null) {
-               list = buildList("PLAYER_NOT_FOUND");
-               callback._notify(list);
-               return;
-           }
+        try {
+            Player existingPlayer = PlayerDAO.findByUsername(admin.username);
+            if (existingPlayer.username == null) {
+                list = buildList("PLAYER_NOT_FOUND");
+                callback._notify(list);
+                return;
+            }
 
-           boolean updateSuccess = AdminDAO.editPlayerName(
-                   admin.username,
-                   "username",
-                   admin.password
-           );
+            boolean updateSuccess = AdminDAO.editPlayerName(
+                    admin.username,
+                    "username",
+                    admin.password
+            );
 
-           if (updateSuccess) {
-               list = buildList("PLAYER_USERNAME_ALREADY_SUCCESS");
-           } else {
-               list = buildList("PLAYER_USERNAME_UPDATE_FAILED");
-           }
-           callback._notify(list);
+            if (updateSuccess) {
+                list = buildList("PLAYER_USERNAME_ALREADY_SUCCESS");
+            } else {
+                list = buildList("PLAYER_USERNAME_UPDATE_FAILED");
+            }
+            callback._notify(list);
 
-       } catch (Exception e) {
-           list = buildList("PLAYER_USERNAME_UPDATE_FAILED: " + e.getMessage());
-           callback._notify(list);
-       }
+        } catch (Exception e) {
+            list = buildList("PLAYER_USERNAME_UPDATE_FAILED: " + e.getMessage());
+            callback._notify(list);
+        }
     }
 
     private void handleDeletePlayer(Admin admin, ClientCallback callback) throws InvalidCredentialsException {
@@ -146,7 +172,7 @@ public class AdminRequestService extends AdminServicePOA {
                         players.get(i).playerId + ":" +
                                 players.get(i).username + ":" +
                                 players.get(i).wins
-                        );
+                );
             }
             callback._notify(new ValuesList(anyArray));
         } catch (Exception e) {

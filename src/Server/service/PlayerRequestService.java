@@ -10,6 +10,7 @@ import Server.WhatsTheWord.referenceClasses.Player;
 import Server.WhatsTheWord.referenceClasses.ValuesList;
 import Server.controller.GameLobbyHandler;
 import Server.main.GameServer;
+import Server.util.LogManager;
 import Server.util.PasswordHashUtility;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
@@ -21,7 +22,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class PlayerRequestService extends PlayerServicePOA {
-    private PlayerDAO playerDao;
+    private static LogManager logManager = new LogManager();
     private static ORB orb = GameServer.orb;
     private static ValuesList list = new ValuesList();
     private static List<String> loggedInUsers = new ArrayList<>();
@@ -29,20 +30,22 @@ public class PlayerRequestService extends PlayerServicePOA {
     public static int gameTime = 30;
     public PlayerRequestService() {
     }
-    public PlayerRequestService(PlayerDAO playerDAO) {
-        this.playerDao = playerDAO;
-    }
     @Override
     public void request(PlayerRequestType type, Player player, ClientCallback playerCallback) {
         if (type.equals(PlayerRequestType.REGISTER)) {
+            logManager.logMessage("Registered new player: " + player.username);
             register(player, playerCallback);
         } else if (type.equals(PlayerRequestType.LOGIN)) {
+            logManager.logMessage(player.username + " logged in.");
             login(player, playerCallback);
         } else if (type.equals(PlayerRequestType.START_GAME)) {
+            logManager.logMessage(player.username + " requested to start game.");
             startGame(player, playerCallback);
         } else if (type.equals(PlayerRequestType.GET_LEADERBOARD)) {
+            logManager.logMessage(player.username + " loaded leaderboards.");
             getLeaderboard(playerCallback);
         } else if (type.equals(PlayerRequestType.LOGOUT)) {
+            logManager.logMessage(player.username + " logged out.");
             logout(player);
         }
     }

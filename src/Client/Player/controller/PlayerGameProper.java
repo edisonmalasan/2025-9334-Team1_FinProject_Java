@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-//Todo revisions
 public class PlayerGameProper implements ClientControllerObserver {
     private Stage stage;
 

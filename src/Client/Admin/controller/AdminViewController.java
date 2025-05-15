@@ -1,6 +1,7 @@
 package Client.Admin.controller;
 
 import Client.Player.controller.PlayerLogin;
+import Client.Player.controller.PlayerResults;
 import Client.WhatsTheWord.client.ClientCallback;
 import Client.WhatsTheWord.client.admin.AdminRequestType;
 import Client.WhatsTheWord.client.admin.AdminService;
@@ -16,12 +17,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.omg.CORBA.Any;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +79,7 @@ public class AdminViewController implements ClientControllerObserver {
         addPlayerButton.setOnAction(this::handleAddPlayer);
         deleteButton.setOnAction(this::handleDeletePlayer);
         saveButton.setOnAction(this::handleSavePlayer);
+        logoutButton.setOnAction(this::handleLogout);
         setGameTimeButton.setOnAction(this::handleSetGameTime);
         setWaitingTimeButton.setOnAction(this::handleSetWaitingTime);
         refreshButton.setOnAction(this::handleRefresh);
@@ -151,7 +157,20 @@ public class AdminViewController implements ClientControllerObserver {
         admin.gameTime = Integer.parseInt(gameTimeTextField.getText());
         adminService.request(AdminRequestType.SET_ROUND_TIME, admin, callback);
     }
-
+    @FXML
+    void handleLogout(ActionEvent event) {
+        adminService.request(AdminRequestType.ADMIN_LOGOUT, PlayerLogin.admin, callback);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Client/Player/view/PlayerLogin.fxml"));
+            Parent root = loader.load();
+            PlayerLogin playerLoginController = loader.getController();
+            Client.callbackImpl.removeAllObservers();
+            playerLoginController.setStage(stage);
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void handleSearch(KeyEvent event) {
         String query = searchTextField.getText().toLowerCase();
         ObservableList<Player> filteredList = FXCollections.observableArrayList();
@@ -212,11 +231,6 @@ public class AdminViewController implements ClientControllerObserver {
                 });
             });
         }
-    }
-
-    @FXML
-    public void handleLogout() {
-
     }
 
     public static List<Player> decodePlayers(Any[] encodedContacts) {
