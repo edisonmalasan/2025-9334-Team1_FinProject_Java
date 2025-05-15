@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class LogManager {
-    private static String filePath = "Server/assets/server_logs.txt";
+    private static String filePath = "server_logs.txt";
 
     public void logMessage(String message) {
         try {
