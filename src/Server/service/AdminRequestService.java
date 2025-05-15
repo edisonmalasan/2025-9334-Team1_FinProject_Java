@@ -61,15 +61,6 @@ public class AdminRequestService extends AdminServicePOA {
                 return;
             }
 
-            // check if already logged in
-            if (loggedInAdmin.contains(admin.username)) {
-                list = buildList("USER_ALREADY_LOGGED_IN");
-                callback._notify(list);
-                return;
-            }
-
-            // success
-            loggedInAdmin.add(admin.username);
             list = buildList("SUCCESSFUL_LOGIN");
             callback._notify(list);
 
