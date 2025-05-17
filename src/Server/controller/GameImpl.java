@@ -35,10 +35,12 @@ public class GameImpl extends GamePOA {
                 gameLobby.winner = checkForWinner(gameLobby.players);
 
                 if (gameLobby.winner != null) {
+                    System.out.println("Player: " + player.username + ": " + gameLobby.winner.username);
                     for (Player playerInLobby : gameLobby.players) {
                         playerInLobby.noOfRoundWins = 0;
                         playerInLobby.time = 0;
                     }
+                    GameLobbyHandler.endGameLobby(gameLobby);
                     break;
                 }
             }

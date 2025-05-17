@@ -26,8 +26,10 @@ public class PlayerRequestService extends PlayerServicePOA {
     private static ORB orb = GameServer.orb;
     private static ValuesList list = new ValuesList();
     private static List<String> loggedInUsers = new ArrayList<>();
+    public static GameLobby waitingLobby = null;
     public static int waitingTime = 10;
     public static int gameTime = 30;
+    private static final Object lobbyLock = new Object();
     public PlayerRequestService() {
     }
     @Override
@@ -79,67 +81,179 @@ public class PlayerRequestService extends PlayerServicePOA {
     }
 
     public void startGame(Player player, ClientCallback callback) {
-        Thread lobbyThread = new Thread(() -> {
-            GameLobby gameLobby = new GameLobby();
+        synchronized (lobbyLock) {
             GameLobbyHandler.addToCallbackList(callback);
-            if (GameLobbyHandler.waitingLobbies.isEmpty()) {
-                System.out.println("No waiting lobbies. Creating new lobby.");
-                Player[] players = new Player[1];
-                players[0] = player;
-                GameLobby newGameLobby = new GameLobby(0, players, waitingTime, gameTime, "", null);
-                GameLobbyHandler.gameLobbies.add(newGameLobby);
-                GameLobbyHandler.waitingLobbies.add(newGameLobby);
-                gameLobby = newGameLobby;
-                gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
-                GameLobbyHandler.emptyCallbackList();
-                if (gameLobby.players.length == 1) {
-                    String message = "*NOT_ENOUGH_PLAYERS*";
-                    callback._notify(GameLobbyHandler.buildList("",-1,message));
-                }
+
+            if (waitingLobby == null) {
+                // First player starts the lobby and the game loop
+                System.out.println("No waiting lobby. Creating new lobby.");
+
+                Player[] players = new Player[] {player};
+                waitingLobby = new GameLobby(0, players, waitingTime, gameTime, "", null);
+                GameLobbyHandler.gameLobbies.add(waitingLobby);
+                GameLobbyHandler.addCountdownCallback(waitingLobby, callback);
+                GameLobbyHandler.addToCallbackMap(waitingLobby, callback);
+
+                new Thread(() -> {
+                    GameLobbyHandler.countdown(waitingLobby, waitingTime);
+                }).start();
 
             } else {
-                joinGame(player);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException();
-                }
+                GameLobbyHandler.addToCallbackMap(waitingLobby, callback);
+                joinGame(player, callback);
             }
-
-            while (gameLobby.winner == null) {
-                GameLobbyHandler.startRound(gameLobby, callback);
-            }
-
-            StringBuilder playerNames = new StringBuilder();
-            for (Player playerInLobby : gameLobby.players) {
-                playerInLobby.hasPlayed = true;
-                PlayerDAO.update(playerInLobby, playerInLobby.username);
-                playerNames.append(playerInLobby.username).append(", ");
-            }
-
-            LobbyDAO.create(playerNames.toString(), gameLobby.winner.username);
-            callback._notify(GameLobbyHandler.buildList("", -1, gameLobby.winner.username));
-
-        });
-        lobbyThread.start();
-    }
-
-    private void joinGame(Player player) {
-        for (GameLobby gameLobby : GameLobbyHandler.gameLobbies) {
-            if (gameLobby.waitingTime != 0) {
-                Player[] original = gameLobby.players;
-                gameLobby.players = Stream.concat(Arrays.stream(original), Stream.of(player)).toArray(Player[]::new);
-            }
-            while (gameLobby.waitingTime != 0) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException();
-                }
-            }
-            break;
         }
     }
+
+
+    private void joinGame(Player player, ClientCallback callback) {
+        GameLobbyHandler.addCountdownCallback(waitingLobby, callback);
+        synchronized (lobbyLock) {
+            if (waitingLobby == null) return; // Safety check
+            Player[] original = waitingLobby.players;
+            waitingLobby.players = Stream.concat(Arrays.stream(original), Stream.of(player)).toArray(Player[]::new);
+        }
+
+        // Wait until the countdown is finished
+        while (waitingLobby != null && waitingLobby.waitingTime > 0) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException();
+            }
+        }
+    }
+
+
+    public static void runGameLobby(GameLobby gameLobby) {
+        //gameLobby.waitingTime = GameLobbyHandler.countdown(gameLobby, gameLobby.waitingTime);
+
+        GameLobbyHandler.emptyCallbackList();
+
+        if (gameLobby.players.length == 1) {
+            // Not enough players
+            for (ClientCallback cb : GameLobbyHandler.getCallbacksForLobby(gameLobby)) {
+                cb._notify(GameLobbyHandler.buildList("", -1, "*NOT_ENOUGH_PLAYERS*"));
+            }
+            synchronized (lobbyLock) {
+                waitingLobby = null;
+            }
+            return;
+        }
+
+        synchronized (lobbyLock) {
+            waitingLobby = null; // Free up for new lobby
+        }
+
+        // ✅ SHARED ROUND LOOP
+        while (gameLobby.winner == null) {
+            GameLobbyHandler.startRound(gameLobby);
+            try {
+                Thread.sleep(2000); // Simulate time per round
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // Game finished
+        StringBuilder playerNames = new StringBuilder();
+        for (Player p : gameLobby.players) {
+            p.hasPlayed = true;
+            PlayerDAO.update(p, p.username);
+            playerNames.append(p.username).append(", ");
+        }
+
+        LobbyDAO.create(playerNames.toString(), gameLobby.winner.username);
+
+        for (ClientCallback cb : GameLobbyHandler.getCallbacksForLobby(gameLobby)) {
+            cb._notify(GameLobbyHandler.buildList("", -1, gameLobby.winner.username));
+        }
+
+        GameLobbyHandler.emptyCallbackList();
+    }
+
+//    public void startGame(Player player, ClientCallback callback) {
+//        final GameLobby[] gameLobby = {new GameLobby()};
+//        Thread lobbyThread = new Thread(() -> {
+//            GameLobbyHandler.addToCallbackList(callback);
+//
+//            if (waitingLobby == null) {
+//                System.out.println("No waiting lobby. Creating new lobby.");
+//                Player[] players = new Player[1];
+//                players[0] = player;
+//                waitingLobby = new GameLobby(0, players, waitingTime, gameTime, "", null);
+//
+//                gameLobby[0] = waitingLobby;
+//
+//                GameLobbyHandler.gameLobbies.add(waitingLobby);
+//                waitingLobby.waitingTime = GameLobbyHandler.countdown(waitingLobby, waitingLobby.waitingTime);
+//                GameLobbyHandler.emptyCallbackList();
+//
+//                if (waitingLobby.players.length == 1) {
+//                    String message = "*NOT_ENOUGH_PLAYERS*";
+//                    callback._notify(GameLobbyHandler.buildList("",-1,message));
+//                    waitingLobby = null;
+//                    return;
+//                }
+//
+//                waitingLobby = null;
+//
+//            } else {
+//                joinGame(player);
+//
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException();
+//                }
+//            }
+//
+//            while (gameLobby[0].winner == null) {
+//                GameLobbyHandler.startRound(gameLobby[0], callback);
+//            }
+//
+//            StringBuilder playerNames = new StringBuilder();
+//            for (Player playerInLobby : gameLobby[0].players) {
+//                playerInLobby.hasPlayed = true;
+//                PlayerDAO.update(playerInLobby, playerInLobby.username);
+//                playerNames.append(playerInLobby.username).append(", ");
+//            }
+//
+//            LobbyDAO.create(playerNames.toString(), gameLobby[0].winner.username);
+//            callback._notify(GameLobbyHandler.buildList("", -1, gameLobby[0].winner.username));
+//
+//        });
+//        lobbyThread.start();
+//    }
+
+//    private void joinGame(Player player) {
+//        Player[] original = waitingLobby.players;
+//        waitingLobby.players = Stream.concat(Arrays.stream(original), Stream.of(player)).toArray(Player[]::new);
+//
+//        while (waitingLobby.waitingTime != 0) {
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException();
+//            }
+//        }
+
+//        for (GameLobby gameLobby : GameLobbyHandler.gameLobbies) {
+//            if (gameLobby.waitingTime != 0) {
+//                Player[] original = gameLobby.players;
+//                gameLobby.players = Stream.concat(Arrays.stream(original), Stream.of(player)).toArray(Player[]::new);
+//                existingLobby = gameLobby;
+//            }
+//            while (gameLobby.waitingTime != 0) {
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException();
+//                }
+//            }
+//            break;
+//        }
+
     public void getLeaderboard(ClientCallback callback) {
         List<Player> playerList = PlayerDAO.findAllPlayers();
         list = encodePlayers(playerList);
