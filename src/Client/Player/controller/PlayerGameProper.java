@@ -122,19 +122,7 @@ public class PlayerGameProper implements ClientControllerObserver {
         }
         letterField.setText("");
     }
-    @FXML
-    private void handleForfeit(ActionEvent event) {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirm Forfeit");
-        confirm.setHeaderText("Are you sure you want to forfeit this round?");
-        confirm.setContentText("You will lose this round immediately.");
 
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                //endRound(false);
-            }
-        });
-    }
     public void playGame(ValuesList list) {
         winner = getWinnerFromList(list);
         if (!Objects.equals(winner, "") || winner.equals("*NOT_ENOUGH_PLAYERS*")) {

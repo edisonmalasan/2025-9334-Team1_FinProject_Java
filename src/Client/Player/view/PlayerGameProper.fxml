@@ -41,11 +41,6 @@
                   <Image url="@/images/profile-alien.png" />
                </image>
             </ImageView>
-            <Button id="forfeitBttn" fx:id="forfeitButton" layoutX="862.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleForfeit" prefHeight="35.0" prefWidth="123.0" style="-fx-background-color: #6A1908; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: #FFFFFF; -fx-border-width: 2;" text="FORFEIT" textFill="WHITE">
-               <font>
-                  <Font name="Silkscreen" size="24.0" />
-               </font>
-            </Button>
          </children>
       </Pane>
       <Pane layoutY="106.0" prefHeight="444.0" prefWidth="1024.0">
